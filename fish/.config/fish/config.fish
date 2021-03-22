@@ -46,176 +46,12 @@ set -gx UNISON "$HOME/.local/share/unison"
 set -gx HISTFILE "$HOME/.local/share/history"
 set -gx TESSDATA_PREFIX "$HOME/homebrew/share/tessdata/"
 
-# This is the list for lf icons:
-# set -gx LF_ICONS "\
-# tw=:\
-# st=:\
-# ow=:\
-# dt=:\
-# di=:\
-# fi=:\
-# ln=:\
-# or=:\
-# ex=:\
-# *.c=:\
-# *.cc=:\
-# *.clj=:\
-# *.coffee=:\
-# *.cpp=:\
-# *.css=:\
-# *.d=:\
-# *.dart=:\
-# *.erl=:\
-# *.exs=:\
-# *.fs=:\
-# *.go=:\
-# *.h=:\
-# *.hh=:\
-# *.hpp=:\
-# *.hs=:\
-# *.html=:\
-# *.java=:\
-# *.jl=:\
-# *.js=:\
-# *.json=:\
-# *.lua=:\
-# *.md=:\
-# *.php=:\
-# *.pl=:\
-# *.pro=:\
-# *.py=:\
-# *.rb=:\
-# *.rs=:\
-# *.scala=:\
-# *.ts=:\
-# *.vim=:\
-# *.cmd=:\
-# *.ps1=:\
-# *.sh=:\
-# *.bash=:\
-# *.zsh=:\
-# *.fish=:\
-# *.tar=:\
-# *.tgz=:\
-# *.arc=:\
-# *.arj=:\
-# *.taz=:\
-# *.lha=:\
-# *.lz4=:\
-# *.lzh=:\
-# *.lzma=:\
-# *.tlz=:\
-# *.txz=:\
-# *.tzo=:\
-# *.t7z=:\
-# *.zip=:\
-# *.z=:\
-# *.dz=:\
-# *.gz=:\
-# *.lrz=:\
-# *.lz=:\
-# *.lzo=:\
-# *.xz=:\
-# *.zst=:\
-# *.tzst=:\
-# *.bz2=:\
-# *.bz=:\
-# *.tbz=:\
-# *.tbz2=:\
-# *.tz=:\
-# *.deb=:\
-# *.rpm=:\
-# *.jar=:\
-# *.war=:\
-# *.ear=:\
-# *.sar=:\
-# *.rar=:\
-# *.alz=:\
-# *.ace=:\
-# *.zoo=:\
-# *.cpio=:\
-# *.7z=:\
-# *.rz=:\
-# *.cab=:\
-# *.wim=:\
-# *.swm=:\
-# *.dwm=:\
-# *.esd=:\
-# *.jpg=:\
-# *.jpeg=:\
-# *.mjpg=:\
-# *.mjpeg=:\
-# *.gif=:\
-# *.bmp=:\
-# *.pbm=:\
-# *.pgm=:\
-# *.ppm=:\
-# *.tga=:\
-# *.xbm=:\
-# *.xpm=:\
-# *.tif=:\
-# *.tiff=:\
-# *.png=:\
-# *.svg=:\
-# *.svgz=:\
-# *.mng=:\
-# *.pcx=:\
-# *.mov=:\
-# *.mpg=:\
-# *.mpeg=:\
-# *.m2v=:\
-# *.mkv=:\
-# *.webm=:\
-# *.ogm=:\
-# *.mp4=:\
-# *.m4v=:\
-# *.mp4v=:\
-# *.vob=:\
-# *.qt=:\
-# *.nuv=:\
-# *.wmv=:\
-# *.asf=:\
-# *.rm=:\
-# *.rmvb=:\
-# *.flc=:\
-# *.avi=:\
-# *.fli=:\
-# *.flv=:\
-# *.gl=:\
-# *.dl=:\
-# *.xcf=:\
-# *.xwd=:\
-# *.yuv=:\
-# *.cgm=:\
-# *.emf=:\
-# *.ogv=:\
-# *.ogx=:\
-# *.aac=:\
-# *.au=:\
-# *.flac=:\
-# *.m4a=:\
-# *.mid=:\
-# *.midi=:\
-# *.mka=:\
-# *.mp3=:\
-# *.mpc=:\
-# *.ogg=:\
-# *.ra=:\
-# *.wav=:\
-# *.oga=:\
-# *.opus=:\
-# *.spx=:\
-# *.xspf=:\
-# *.pdf=:\
-# *.nix=:\
-# "
-
 ### ALIASES
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias cp='cp -iv'
 alias mv='mv -iv'
-alias rm='rm -v'
+alias rm='rm -iv'
 alias mkd='mkdir -pv'
 alias cat='bat'
 alias yt='youtube-dl --add-metadata -i'
@@ -238,9 +74,14 @@ alias sdn='sudo shutdown -h now'
 alias f='$FILE'
 alias e='$EDITOR'
 alias v='$EDITOR'
-alias ls='exa'
-alias la='exa -a'
-alias ll='exa -lah'
+
+# Changing "ls" to "exa"
+alias ls='exa --color=always --group-directories-first' # my preferred listing
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -al --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
+
 # alias ..='cd ..'
 # alias .='cd .'
 alias xclip="xclip -selection c"
@@ -254,3 +95,4 @@ alias lfrc='$EDITOR $HOME/.config/lf/lfrc'
 alias zprof='$EDITOR $HOME/.zprofile'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
+
