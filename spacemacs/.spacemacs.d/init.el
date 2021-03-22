@@ -32,9 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(shell-scripts
-     ruby
-     rust
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -170,6 +168,10 @@ This function should only modify configuration layer settings."
              ranger-cleanup-on-disable t
              ranger-ignored-extensions '("mkv" "flv" "iso" "mp4"))
 
+     ruby
+     rust
+
+     shell-scripts
      ;; SPC ' runs eshell in a popup buffer
      ;; To run your terminal shell, add
      ;; shell-default-shell 'multi-term
@@ -396,8 +398,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
-   dotspacemacs-default-font '("FiraCode Nerd Font"
-                               :size 14.0
+   dotspacemacs-default-font '("Fira Code"
+                               :size 11.0
                                :weight normal
                                :width normal)
 
@@ -552,10 +554,10 @@ It should only modify the values of Spacemacs settings."
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
    dotspacemacs-line-numbers '(:relative t
-                               :disabled-for-modes dired-mode
-                                                   doc-view-mode
-                                                   pdf-view-mode
-                               :size-limit-kb 1000)
+                                         :disabled-for-modes dired-mode
+                                         doc-view-mode
+                                         pdf-view-mode
+                                         :size-limit-kb 1000)
 
 
    ;; Code folding method. Possible values are `evil' and `origami'.
@@ -714,6 +716,9 @@ before packages are loaded."
   (if (version<= "27.1" emacs-version)
       (setq bidi-inhibit-bpa t))
 
+  ;; Cursor always centered
+  (centered-cursor-mode t)
+
   ;; Files with known long lines
   ;; SPC f l to open files literally to disable most text processing
 
@@ -813,6 +818,7 @@ before packages are loaded."
   ;;
   ;; Use Spacemacs as the $EDITOR (or $GIT_EDITOR) for git commits messages
   ;; when using git commit on the command line
+  (require 'git-commit)
   (global-git-commit-mode t)
   ;;
   ;; Set locations of all your Git repositories
@@ -820,7 +826,7 @@ before packages are loaded."
   ;; `SPC g L' - list all Git repositories in the defined paths,
   (setq magit-repository-directories
         '(("~/.emacs.d"  . 0)
-          ("~/code/" . 2)))
+          ("~/Code/" . 2)))
   ;;
   ;; end of version control configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -893,8 +899,16 @@ before packages are loaded."
   ;; Markdown mode hook for orgtbl-mode minor mode
   (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
   ;;
-  ;; Turn on visual-line-mode for Org-mode only
-  ;; (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
+  ;; Turn on visual-line-navigation for Org-mode only
+  (defun org-line-wrap ()
+    (visual-line-mode)
+    (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
+    (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
+    (evil-define-minor-mode-key 'motion 'visual-line-mode (kbd "<down>") 'evil-next-visual-line)
+    (evil-define-minor-mode-key 'motion 'visual-line-mode (kbd "<up>") 'evil-previous-visual-line)
+    (evil-normalize-keymaps))
+
+  (add-hook 'org-mode-hook 'org-line-wrap)
   ;;
   ;; use org-re-reveal instead of org-reveal (which hasnt been updated in ages and breaks org-mode 9.2)
   ;; (use-package org-re-reveal :after org)
