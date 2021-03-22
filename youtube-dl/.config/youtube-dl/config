@@ -1,0 +1,2 @@
+#Save all to this directory.
+-o ~/Downloads/%(title)s.%(ext)s
