@@ -9,7 +9,7 @@ if has('nvim')
 endif
 
 let g:vimtex_view_general_viewer
-        \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+        \ = '/bin/zathura'
 let g:vimtex_view_general_options = '-r @line @pdf @tex'
 
 " Runs a script that cleans out tex build files whenever I close out of a .tex file.
