@@ -1,5 +1,10 @@
 ### ENVVARS
 set -gx PATH "$HOME/.emacs.d/bin" $PATH
+set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_DATA_HOME "$HOME/.local/share"
+set -gx XDG_CACHE_HOME "$HOME/.cache"
+
+# Neovim plugins
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
 
 # Remove default greeting
@@ -15,8 +20,13 @@ set -gx PATH "$HOME/.local/bin" $PATH
 # Android tools
 set -gx PATH "$HOME/.local/bin/platform-tools" $PATH
 
-# Cargo
-set -gx PATH "$XDG_DATA_HOME/cargo/bin" $PATH
+# Cargo and rust tools
+set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
+set -gx PATH "$CARGO_HOME/bin" $PATH
+
+# Node.js npm
+set -gx NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
+set -gx PATH "$NPM_CONFIG_PREFIX/bin" $PATH
 
 # Default programs:
 set -gx EDITOR "nvim"
@@ -24,10 +34,6 @@ set -gx VISUAL "nvim"
 set -gx READER "less"
 
 # ~/ Clean-up:
-set -gx XDG_CONFIG_HOME "$HOME/.config"
-set -gx XDG_DATA_HOME "$HOME/.local/share"
-set -gx XDG_CACHE_HOME "$HOME/.cache"
-
 set -gx NOTMUCH_CONFIG "$XDG_CONFIG_HOME/notmuch-config"
 set -gx GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
 set -gx SPACEVIMDIR "$XDG_CONFIG_HOME/SpaceVim/"
@@ -39,7 +45,6 @@ set -gx WINEPREFIX "$HOME/.local/share/wineprefixes/default"
 set -gx PASSWORD_STORE_DIR "$HOME/.local/share/password-store"
 set -gx TMUX_TMPDIR "$XDG_RUNTIME_DIR"
 set -gx ANDROID_SDK_HOME "$XDG_CONFIG_HOME/android"
-set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
 set -gx GOPATH "$HOME/.local/share/go"
 set -gx ANSIBLE_CONFIG "$XDG_CONFIG_HOME/ansible/ansible.cfg"
 set -gx UNISON "$HOME/.local/share/unison"
