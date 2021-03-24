@@ -37,6 +37,7 @@ set -gx READER "less"
 set -gx NOTMUCH_CONFIG "$XDG_CONFIG_HOME/notmuch-config"
 set -gx GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
 set -gx SPACEVIMDIR "$XDG_CONFIG_HOME/SpaceVim/"
+set -gx XINITRC "$XDG_CONFIG_HOME/.config}/x11/xinitrc"
 set -gx LESSHISTFILE "-"
 set -gx WGETRC "$XDG_CONFIG_HOME/wget/wgetrc"
 set -gx INPUTRC "$XDG_CONFIG_HOME/inputrc"
@@ -58,7 +59,7 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -iv'
 alias mkd='mkdir -pv'
-alias cat='bat'
+# alias cat='bat'
 alias yt='youtube-dl --add-metadata -i'
 alias yta='yt -x -f bestaudio/best'
 alias ffmpeg='ffmpeg -hide_banner'
@@ -93,11 +94,16 @@ alias xclip="xclip -selection c"
 
 # These are shortcuts for editing config files.
 alias vimrc='$EDITOR $HOME/.config/nvim/init.vim'
-alias spcvimrc='$EDITOR $HOME/.config/SpaceVim/init.toml'
-alias aliasrc='$EDITOR $HOME/.config/aliasrc'
 alias fishrc='$EDITOR $HOME/.config/fish/config.fish'
-alias lfrc='$EDITOR $HOME/.config/lf/lfrc'
-alias zprof='$EDITOR $HOME/.zprofile'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
+# Change fish shell colors
+cat ~/.cache/wal/sequences &
+
+# Starship prompt
+starship init fish | source
+
+# Vi bindings
+fish_vi_key_bindings
+set vi_mode_default vi_mode_normal
