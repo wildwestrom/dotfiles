@@ -1,7 +1,7 @@
 " Coloring
 " theme
 set background=dark
-colorscheme "solarized8"
+" colorscheme "solarized8"
 
 " misc
 highlight Pmenu guibg='#00010a' guifg=white             " popup menu colors
