@@ -88,7 +88,6 @@ Plug 'easymotion/vim-easymotion'                        " make movement a lot fa
 Plug '907th/vim-auto-save'                              " nothing beats this
 Plug 'unblevable/quick-scope'                           " press t in normal mode and move
 Plug 'dermusikman/sonicpi.vim'                          " sonic pi for vim
-Plug '/Users/main/homebrew/bin/fzf'
 
 call plug#end()
 
