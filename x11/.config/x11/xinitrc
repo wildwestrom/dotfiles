@@ -14,4 +14,4 @@ else
 	. "$HOME/.xprofile"
 fi
 
-exec i3
+i3
