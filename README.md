@@ -1,9 +1,8 @@
-# Dotfiles GNU/Linux
+# Dotfiles MacOS
 
-This is a collection of dotfiles for my various instances of GNU/Linux.
+This is a collection of dotfiles for MacOS 11.
 
 To install, run these commands:
-
 
 1. First clone into a folder. I prefer `~/.dotfiles`.
 ```shell
@@ -19,7 +18,6 @@ Add -n option to do a dry run and make sure all your symlinks are correct.
 stow -nvt ~ */
 stow -vt ~ */
 ```
-
 
 ## License
 
