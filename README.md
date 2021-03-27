@@ -4,16 +4,22 @@ This is a collection of dotfiles for my various instances of GNU/Linux.
 
 To install, run these commands:
 
+
+1. First clone into a folder. I prefer `~/.dotfiles`.
 ```shell
-# First clone into a folder. I prefer `~/.dotfiles`.
 git clone https://gitlab.com/wildwestrom/dotfiles-gnu-linux.git ~/.dotfiles
-# Then move into that directory
+```
+2. Then move into that directory.
+```shell
 cd ~/.dotfiles
-# Now use gnu-stow to symbolicly link these files. 
-# Add -n option to do a dry run.
-# stow -nvt ~ *
+```
+3. Now use gnu-stow to symbolicly link these files.  
+Add -n option to do a dry run and make sure all your symlinks are correct.
+```shell
+stow -nvt ~ *
 stow -vt ~ *
 ```
+
 
 ## License
 
