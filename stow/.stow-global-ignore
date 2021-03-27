@@ -19,6 +19,6 @@ _darcs
 
 ^/README.*
 ^/LICENSE.*
-^/COPYINGn
+^/COPYING
 
 \.DS_Store   # Annoying MacOS Crap
