@@ -1,21 +1,42 @@
 ### ENVVARS
-set -gx PATH "$HOME/.emacs.d/bin" $PATH
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
+
+set -g fish_user_paths "$HOME/homebrew/bin" $fish_user_paths
+set -g fish_user_paths "$HOME/homebrew/sbin" $fish_user_paths
+
+set -gx PATH "/opt/local/bin:/opt/local/sbin" $PATH
+set -gx MANPATH "/usr/local/man" $MANPATH 
+set -gx PATH "$HOME/.emacs.d/bin" $PATH
+set -gx PATH "$HOME/homebrew/opt/openjdk@11/bin" $PATH
+set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
+set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
+
+set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+
+# Latex Variables
+set -gx PATH "/usr/local/texlive/2020/bin/x86_64-darwin/" $PATH
+set -gx MANPATH "/usr/local/texlive/2020/texmf-dist/doc/man" $MANPATH
+set -gx INFOPATH "/usr/local/texlive/2020/texmf-dist/doc/info" $INFOPATH
+
+# Adds `~/.local/bin` to $PATH
+set -gx PATH "$HOME/.local/bin" $PATH
+
+# Homebrew options.
+set -gx HOMEBREW_NO_ANALYTICS 1 $HOMEBREW_NO_ANALYTICS
+set -gx HOMEBREW_NO_INSECURE_REDIRECT 1 $HOMEBREW_NO_INSECURE_REDIRECT
+set -gx HOMEBREW_CASK_OPTS --require-sha $HOMEBREW_CASK_OPTS
+set -gx HOMEBREW_CASK_OPTS "--appdir=~/Applications" $HOMEBREW_CASK_OPTS
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+set -gx PATH "$HOME/.rvm/bin" $PATH
 
 # Neovim plugins
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
 
 # Remove default greeting
 set fish_greeting
-
-# Manpages
-set -gx MANPATH "$MANPATH:/usr/local/man" 
-set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
-
-# Adds `~/.local/bin` to $PATH
-set -gx PATH "$HOME/.local/bin" $PATH
 
 # Android tools
 set -gx PATH "$HOME/.local/bin/platform-tools" $PATH
@@ -99,7 +120,7 @@ alias fishrc='$EDITOR $HOME/.config/fish/config.fish'
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
 # Change fish shell colors
-cat ~/.cache/wal/sequences &
+# cat ~/.cache/wal/sequences &
 
 # Starship prompt
 starship init fish | source

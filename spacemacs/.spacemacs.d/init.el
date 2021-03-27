@@ -398,8 +398,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
-   dotspacemacs-default-font '("Fira Code"
-                               :size 11.0
+   dotspacemacs-default-font '("FiraCode Nerd Font"
+                               :size 14.0
                                :weight normal
                                :width normal)
 
