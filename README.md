@@ -6,7 +6,7 @@ To install, run these commands:
 
 1. First clone into a folder. I prefer `~/.dotfiles`.
 ```shell
-git clone https://gitlab.com/wildwestrom/dotfiles-gnu-linux.git ~/.dotfiles
+git clone https://gitlab.com/wildwestrom/dotfiles.git ~/.dotfiles
 ```
 2. Then move into that directory.
 ```shell
