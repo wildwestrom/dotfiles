@@ -1,7 +1,0 @@
-#!/bin/sh
-
-xrandr --output eDP --brightness 0.7 &
-setbg &
-picom --config /home/main/.config/picom/picom.conf &
-xrdb /home/main/.config/x11/xresources &
-unclutter &
