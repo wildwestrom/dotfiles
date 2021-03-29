@@ -35,7 +35,6 @@ Plug 'gregsexton/MatchTag'                              " highlight matching htm
 Plug 'alvan/vim-closetag'                               " auto close html tags
 Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'sheerun/vim-polyglot'                             " syntax highlighting
-Plug 'junegunn/goyo.vim'                                
 
 " Colorscheme
 " Plug 'lifepillar/vim-solarized8'
