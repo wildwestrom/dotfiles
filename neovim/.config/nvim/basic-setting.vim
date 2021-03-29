@@ -24,8 +24,8 @@ set inccommand=nosplit                                  " visual feedback while 
 set autoread                                            " automatically updates the file
 " let loaded_netrw = 0                                    " disable netrw
 let g:omni_sql_no_default_maps = 1                      " disable sql omni completion
-set wrap linebreak nolist                               " soft wrap
-set wildmenu
+" set wrap linebreak nolist                               " soft wrap
+set nowrap                                              " no wrap
 set nospell                                             " disable spellcheck by default"
 syntax on
 
