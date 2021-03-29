@@ -1,4 +1,8 @@
 ### ENVVARS
+
+# Remove default greeting
+set fish_greeting
+
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
@@ -34,9 +38,6 @@ set -gx PATH "$HOME/.rvm/bin" $PATH
 
 # Neovim plugins
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
-
-# Remove default greeting
-set fish_greeting
 
 # Android tools
 set -gx PATH "$HOME/.local/bin/platform-tools" $PATH
@@ -118,9 +119,6 @@ alias vimrc='$EDITOR $HOME/.config/nvim/init.vim'
 alias fishrc='$EDITOR $HOME/.config/fish/config.fish'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
-
-# Change fish shell colors
-# cat ~/.cache/wal/sequences &
 
 # Starship prompt
 starship init fish | source
