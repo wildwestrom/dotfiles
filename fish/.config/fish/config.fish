@@ -119,6 +119,7 @@ alias xclip="xclip -selection c"
 alias vimrc='cd $XDG_CONFIG_HOME/nvim/'
 alias fishrc='$EDITOR $XDG_CONFIG_HOME/fish/config.fish'
 alias tmuxrc='$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf'
+alias termrc='$EDITOR $XDG_CONFIG_HOME/alacritty/alacritty.yml'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
