@@ -26,7 +26,7 @@ set -gx PATH "$HOME/.local/bin" $PATH
 # Homebrew options.
 set -gx HOMEBREW_NO_ANALYTICS 1 $HOMEBREW_NO_ANALYTICS
 set -gx HOMEBREW_NO_INSECURE_REDIRECT 1 $HOMEBREW_NO_INSECURE_REDIRECT
-set -gx HOMEBREW_CASK_OPTS --require-sha $HOMEBREW_CASK_OPTS
+# set -gx HOMEBREW_CASK_OPTS --require-sha $HOMEBREW_CASK_OPTS
 set -gx HOMEBREW_CASK_OPTS "--appdir=~/Applications" $HOMEBREW_CASK_OPTS
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
