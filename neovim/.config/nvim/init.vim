@@ -1,7 +1,7 @@
 if !exists('g:vscode')
     source ~/.config/nvim/basic-setting.vim 
 
-    source ~/.config/nvim/configplugins/plugins.vim
+    source ~/.config/nvim/plugins.vim
 
     source ~/.config/nvim/config/color.vim
     source ~/.config/nvim/config/keymaps.vim
@@ -9,7 +9,6 @@ if !exists('g:vscode')
 
     source ~/.config/nvim/configplugins/airline.vim
     source ~/.config/nvim/configplugins/autosave.vim
-    source ~/.config/nvim/configplugins/coc.vim
     source ~/.config/nvim/configplugins/easymotion.vim
     source ~/.config/nvim/configplugins/indentlines.vim
     source ~/.config/nvim/configplugins/rainbowbrackets.vim
