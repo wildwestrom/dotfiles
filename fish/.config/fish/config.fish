@@ -115,8 +115,10 @@ alias l.='exa -a | egrep "^\."'
 alias xclip="xclip -selection c"
 
 # These are shortcuts for editing config files.
-alias vimrc='$EDITOR $HOME/.config/nvim/init.vim'
-alias fishrc='$EDITOR $HOME/.config/fish/config.fish'
+# alias vimrc='$EDITOR $HOME/.config/nvim/init.vim'
+alias vimrc='cd $XDG_CONFIG_HOME/nvim/'
+alias fishrc='$EDITOR $XDG_CONFIG_HOME/fish/config.fish'
+alias tmuxrc='$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
