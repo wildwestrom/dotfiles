@@ -12,7 +12,7 @@ git clone https://gitlab.com/wildwestrom/dotfiles.git ~/.dotfiles
 ```shell
 cd ~/.dotfiles
 ```
-3. Now use gnu-stow to symbolicly link these files.  
+3. Now use gnu-stow to symbolicly link these files. 
 Add -n option to do a dry run and make sure all your symlinks are correct.
 ```shell
 stow -nvt ~ */ --ignore=.DS_Store
