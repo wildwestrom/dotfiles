@@ -11,7 +11,7 @@ set -g fish_user_paths "$HOME/homebrew/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/homebrew/sbin" $fish_user_paths
 
 set -gx PATH "/opt/local/bin:/opt/local/sbin" $PATH
-set -gx MANPATH "/usr/local/man" $MANPATH 
+set -gx MANPATH "/usr/local/man" $MANPATH
 set -gx PATH "$HOME/.emacs.d/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/openjdk@11/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
@@ -120,6 +120,7 @@ alias vimrc='cd $XDG_CONFIG_HOME/nvim/'
 alias fishrc='$EDITOR $XDG_CONFIG_HOME/fish/config.fish'
 alias tmuxrc='$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf'
 alias termrc='$EDITOR $XDG_CONFIG_HOME/alacritty/alacritty.yml'
+alias dotfiles='lazygit -w $HOME/.dotfiles/'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
