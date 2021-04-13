@@ -10,4 +10,5 @@
 # Example Emacs configuration in practicalli/spacemacs.d
 # https://github.com/practicalli/spacemacs.d/
 
-java -jar ~/.local/apps/clj-kondo-lsp-server-standalone.jar
+java -jar ~/.local/bin/clj-kondo-lsp-server-2021.03.31-standalone.jar
+
