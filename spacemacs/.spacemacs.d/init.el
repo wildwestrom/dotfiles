@@ -58,12 +58,20 @@ This function should only modify configuration layer settings."
      ;; (auto-completion :variables auto-completion-idle-delay nil)
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
+
+     ;; Clojure specific configuration in dotspacemacs/user-config
      (clojure :variables
-              clojure-toplevel-inside-comment-form t
+              ;; clojure-backend 'cider               ;; use cider and disable lsp
+              ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
+              cider-repl-display-help-banner nil      ;; disable help banner
+              cider-pprint-fn 'fipp                   ;; fast pretty printing
+              clojure-indent-style 'align-arguments
+              clojure-align-forms-automatically t
+              clojure-toplevel-inside-comment-form t  ;; evaluate expressions in comment as top level
+              cider-result-overlay-position 'at-point ;; results shown right after expression
               cider-overlays-use-font-lock t
-              clojure-enable-linters nil
-              cider-preferred-build-tool 'clojure-cli
-              clojure-backend 'cider)
+              cider-repl-buffer-size-limit 100        ;; limit lines shown in REPL buffer
+              )
 
 
      ;; SPC a L displays key and command history in a separate buffer
@@ -119,9 +127,18 @@ This function should only modify configuration layer settings."
 
      (latex :variables latex-refresh-preview t)
 
-     ;; Clojure specific configuration in dotspacemacs/user-config
 
-     lsp
+     (lsp :variables
+          lsp-enable-on-type-formatting nil
+          lsp-enable-indentation nil
+          lsp-enable-symbol-highlighting t
+          lsp-modeline--enable-diagnostics t
+          lsp-ui-doc-show-with-cursor nil   ;; disable doc popup for cursor
+          lsp-ui-doc-delay 2
+          lsp-ui-sideline-enable nil
+          lsp-lens-enable t
+          treemacs-space-between-root-nodes nil
+          lsp-file-watch-threshold 10000)
 
      markdown
 
@@ -979,13 +996,13 @@ before packages are loaded."
   ;; Uses a custom script to run the clj-kondo-lsp-server.jar which should be added
   ;; to the operating system path and include:
   ;; java -jar ~/path/to/clj-kondo-lsp-server-standalone.jar
-  (use-package lsp-mode
-    :ensure t
-    :hook ((clojure-mode . lsp))
-    :commands lsp
-    :custom ((lsp-clojure-server-command '("clojure-lsp-server-clj-kondo")))
-    :config (dolist  (m '(clojure-mode clojurescript-mode))
-              (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
+  ;; (use-package lsp-mode
+  ;;   :ensure t
+  ;;   :hook ((clojure-mode . lsp))
+  ;;   :commands lsp
+  ;;   :custom ((lsp-clojure-server-command '("clojure-lsp-server-clj-kondo")))
+  ;;   :config (dolist  (m '(clojure-mode clojurescript-mode))
+  ;;             (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
   ;;
   ;;
   ;; TODO: review this binding - gives poor user experience
