@@ -9,8 +9,11 @@ if !exists('g:vscode')
 
     source ~/.config/nvim/configplugins/airline.vim
     source ~/.config/nvim/configplugins/autosave.vim
+    source ~/.config/nvim/configplugins/coc.vim
+    source ~/.config/nvim/configplugins/clojure.vim
     source ~/.config/nvim/configplugins/easymotion.vim
     source ~/.config/nvim/configplugins/indentlines.vim
+    source ~/.config/nvim/configplugins/markdownpreview.vim
     source ~/.config/nvim/configplugins/rainbowbrackets.vim
     source ~/.config/nvim/configplugins/spell.vim
     source ~/.config/nvim/configplugins/startify.vim

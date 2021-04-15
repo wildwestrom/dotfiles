@@ -28,6 +28,7 @@ let g:omni_sql_no_default_maps = 1                      " disable sql omni compl
 set nowrap                                              " no wrap
 set nospell                                             " disable spellcheck by default"
 syntax on
+set shell=bash\ -i                                      " set default shell to bash for commands
 
 
 "tab settings

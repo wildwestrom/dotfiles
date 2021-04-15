@@ -38,6 +38,7 @@ set -gx PATH "$HOME/.rvm/bin" $PATH
 
 # Neovim plugins
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
+set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/vim-iced/bin" $PATH
 
 # Android tools
 set -gx PATH "$HOME/.local/bin/platform-tools" $PATH

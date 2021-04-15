@@ -40,7 +40,7 @@ Plug 'sheerun/vim-polyglot'                             " syntax highlighting
 " Plug 'lifepillar/vim-solarized8'
 
 " Code Completion
-Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Look Up Key Bindings
 Plug 'liuchengxu/vim-which-key'
@@ -74,7 +74,11 @@ Plug 'guns/vim-clojure-highlight', {'for': 'clojure'}
 Plug 'guns/vim-sexp', {'for': 'clojure'}
 Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
 
+" Markdown
+Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
+
 " other
+Plug 'junegunn/fzf'                                     " fuzzy finder support
 Plug 'mhinz/vim-startify'                               " cool start up screen
 Plug 'kristijanhusak/vim-carbon-now-sh'                 " lit code Screenshots
 Plug 'tpope/vim-fugitive'                               " git support
