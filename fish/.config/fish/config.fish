@@ -10,9 +10,12 @@ set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -g fish_user_paths "$HOME/homebrew/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/homebrew/sbin" $fish_user_paths
 
+set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
+
 set -gx PATH "/opt/local/bin:/opt/local/sbin" $PATH
 set -gx MANPATH "/usr/local/man" $MANPATH
-set -gx PATH "$HOME/.emacs.d/bin" $PATH
+
+set -gx PATH "$HOME/emacs/default/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/openjdk@11/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
@@ -30,7 +33,6 @@ set -gx PATH "$HOME/.local/bin" $PATH
 # Homebrew options.
 set -gx HOMEBREW_NO_ANALYTICS 1 $HOMEBREW_NO_ANALYTICS
 set -gx HOMEBREW_NO_INSECURE_REDIRECT 1 $HOMEBREW_NO_INSECURE_REDIRECT
-# set -gx HOMEBREW_CASK_OPTS --require-sha $HOMEBREW_CASK_OPTS
 set -gx HOMEBREW_CASK_OPTS "--appdir=~/Applications" $HOMEBREW_CASK_OPTS
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
@@ -46,6 +48,9 @@ set -gx PATH "$HOME/.local/bin/platform-tools" $PATH
 # Cargo and rust tools
 set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
 set -gx PATH "$CARGO_HOME/bin" $PATH
+
+# Doom Emacs
+set -gx PATH "$HOME/emacs/doom-emacs/bin" $PATH
 
 # Node.js npm
 set -gx NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
