@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : hiccup-class
+#key : hiccup-class
+#contributor : wildwestrom
+# --
+{:class '[$1]}

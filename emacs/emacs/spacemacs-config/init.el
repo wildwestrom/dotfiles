@@ -20,7 +20,7 @@ This function should only modify configuration layer settings."
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-enable-lazy-installation nil
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
@@ -32,8 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(perl5
-     haskell
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -73,14 +72,13 @@ This function should only modify configuration layer settings."
               cider-repl-buffer-size-limit 100        ;; limit lines shown in REPL buffer
               )
 
-
-     ;; SPC a L displays key and command history in a separate buffer
-     command-log
-
      ;; Nyan cat tells you where you are in your file
      ;; :variables
      ;; colors-enable-nyan-cat-progress-bar (display-graphic-p)
      colors
+
+     ;; SPC a L displays key and command history in a separate buffer
+     command-log
 
      ;; Tools to work with comma separate values
      ;; Used for data science files
@@ -97,7 +95,7 @@ This function should only modify configuration layer settings."
      ;; refine hunk 'all highlights characters changed on each line
      (git :variables
           git-magit-status-fullscreen t
-          magit-diff-refine-hunk 'all)
+          magit-diff-refine-hunk t)
 
      ;; SPC g h to use GitHub repositories
      ;; SPC g g to use GitHub Gists
@@ -115,6 +113,8 @@ This function should only modify configuration layer settings."
      ;; (gtags :variables
      ;;        gtags-enable-by-default t)
 
+     haskell
+
      ;; helm-follow-mode sticky - remembers use of C-c C-f
      ;; - follow mode previews when scrolling through a helm list
      ;; (setq helm-follow-mode-persistent t)
@@ -128,40 +128,46 @@ This function should only modify configuration layer settings."
      (latex :variables latex-refresh-preview t)
 
 
+     ;; Language server protocol with minimal visual impact
+     ;; https://practicalli.github.io/spacemacs/install-spacemacs/clojure-lsp/lsp-variables-reference.html
      (lsp :variables
+          ;; Formatting and indentation - use Cider instead
           lsp-enable-on-type-formatting nil
+          ;; Set to nil to use CIDER features instead of LSP UI
           lsp-enable-indentation nil
+
+          ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
+          ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
           lsp-enable-symbol-highlighting t
-          lsp-modeline--enable-diagnostics t
-          lsp-ui-doc-show-with-cursor nil   ;; disable doc popup for cursor
-          lsp-ui-doc-delay 2
+
+          ;; Show lint error indicator in the mode-bar (tested on doom-modeline)
+          lsp-modeline-diagnostics-enable t
+
+          ;; popup documentation boxes
+          ;; lsp-ui-doc-enable nil          ;; disable all doc popups
+          lsp-ui-doc-show-with-cursor nil   ;; doc popup for cursor
+          ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
+          lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
+
+          ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
+
+          ;; reference count for functions (assume their maybe other lenses in future)
           lsp-lens-enable t
+
+          ;; Efficient use of space in treemacs-lsp display
           treemacs-space-between-root-nodes nil
+
+          ;; Optimization for large files
           lsp-file-watch-threshold 10000)
 
-     markdown
+     (markdown :variables
+               markdown-live-preview-engine 'vmd)
 
      ;; Editing multiple lines of text concurrently
      ;; `g r' menu in Emacs normal state
      multiple-cursors
 
-     python
-     ipython-notebook
-
-
-     ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
-     (spacemacs-modeline :variables
-                         doom-modeline-height 12
-                         doom-modeline-major-mode-color-icon t
-                         doom-modeline-buffer-file-name-style 'relative-to-project
-                         doom-modeline-display-default-persp-name t
-                         doom-modeline-minor-modes nil
-                         doom-modeline-modal-icon nil)
-
-     ;; buffer-position word-count parrot selection-info
-
-     ;; Spacemacs Org mode
      (org :variables
           org-enable-github-support t
           org-enable-bootstrap-support t
@@ -175,6 +181,10 @@ This function should only modify configuration layer settings."
           org-journal-time-prefix "* "
           org-journal-time-format ""
           org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\"")
+
+     perl5
+     python
+     ipython-notebook
 
      ;; Text-based file manager with preview
      ;; SPC a r
@@ -204,10 +214,19 @@ This function should only modify configuration layer settings."
                         spacemacs-layouts-restrict-spc-tab t
                         persp-autokill-buffer-on-remove 'kill-weak)
 
+     ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
+     (spacemacs-modeline :variables
+                         doom-modeline-height 12
+                         doom-modeline-major-mode-color-icon t
+                         doom-modeline-buffer-file-name-style 'relative-to-project
+                         doom-modeline-display-default-persp-name t
+                         doom-modeline-minor-modes nil
+                         doom-modeline-modal-icon nil)
+
      ;; Spell as you type with Flyspell package,
      ;; requires external command - ispell, hunspell, aspell
      ;; SPC S menu, SPC S s to check current word
-     ;; spell-checking
+      spell-checking
 
      ;; Use original flycheck fringe bitmaps
      (syntax-checking :variables
@@ -223,14 +242,14 @@ This function should only modify configuration layer settings."
      ;; Customise the Spacemacs themes
      ;; https://develop.spacemacs.org/layers/+themes/theming/README.html
      ;; Code in dotspacemacs/user-init to reduce size of modeline
-     ;; theming
+     theming
 
      ;; Support font ligatures (fancy symbols) in all modes
      ;; 'prog-mode for only programming languages
      ;; including text-mode may cause issues with org-mode and magit
-     ; (unicode-fonts :variables
-     ;                unicode-fonts-enable-ligatures t
-     ;                unicode-fonts-ligature-modes '(prog-mode))
+     (unicode-fonts :variables
+                    unicode-fonts-enable-ligatures t
+                    unicode-fonts-ligature-modes '(prog-mode))
 
      ;; Highlight changes in buffers
      ;; SPC g . transient state for navigating changes
@@ -358,7 +377,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner "~/.spacemacs.d/banners/practicalli-logo.svg"
+   dotspacemacs-startup-banner "~/emacs/spacemacs-config/banners/practicalli-logo.svg"
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -416,7 +435,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("FiraCode Nerd Font"
-                               :size 14.0
+                               :size 12.0
                                :weight normal
                                :width normal)
 
@@ -717,14 +736,41 @@ before packages are loaded."
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Keeping Helm history clean
+  (setq history-delete-duplicates t)
+  (setq extended-command-history
+        (delq nil (delete-dups extended-command-history)))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Connecting to a reomote nREPL server
+  (setq nrepl-use-ssh-fallback-for-remote-hosts t)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Keycast - show Emacs commands in mode line
+  (use-package keycast
+    :commands keycast-mode
+    :config
+    (define-minor-mode keycast-mode
+      "Show current command and its key binding in the mode line."
+      :global t
+      (if keycast-mode
+          (progn
+            (add-hook 'pre-command-hook 'keycast-mode-line-update t)
+            (add-to-list 'mode-line-misc-info '("" mode-line-keycast "    "))
+            )
+        (remove-hook 'pre-command-hook 'keycast-mode-line-update)
+        (setq global-mode-string (remove '("" mode-line-keycast " ") mode-line-misc-info))))
+    )
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Emacs text rendering optimizations
   ;; https://200ok.ch/posts/2020-09-29_comprehensive_guide_on_handling_long_lines_in_emacs.html
-
-  ;; Never truncate lines
-  (setq-default truncate-lines t)
-
-  ;; Make M-q create continuous paragraphs
-  (setq-default fill-column 536870911)
 
   ;; Only render text left to right
   (setq-default bidi-paragraph-direction 'left-to-right)
@@ -732,9 +778,6 @@ before packages are loaded."
   ;; Disable Bidirectional Parentheses Algorithm
   (if (version<= "27.1" emacs-version)
       (setq bidi-inhibit-bpa t))
-
-  ;; Cursor always centered
-  (centered-cursor-mode t)
 
   ;; Files with known long lines
   ;; SPC f l to open files literally to disable most text processing
@@ -761,57 +804,94 @@ before packages are loaded."
   ;;
   (with-eval-after-load 'doom-modeline
     (doom-modeline-def-modeline 'practicalli-modeline
-      '(workspace-name window-number modals persp-name buffer-info remote-host vcs)
-      '(repl debug lsp process matches checker buffer-position word-count parrot selection-info misc-info))
+                                '(workspace-name window-number modals persp-name buffer-info matches remote-host vcs)
+                                '(misc-info repl lsp))
     (practicalli/setup-custom-doom-modeline))
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;; checker = flycheck results (not working)
+  ;; buffer-position
+  ;; word-count - number of words in current buffer
+  ;; parrot
+  ;; selection-info
+  ;; repl - shows status of Cloure repl (not working)
+  ;; process ??
+  ;; debug
+  ;; misc-info  - used for keycast
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; User key bindings
   ;;
-  ;; org-journal user keybinding
-  ;; - create a new journal entry
+  ;; org-journal - create a new journal entry - `, j' in org-journal mode
   (spacemacs/set-leader-keys "oj" 'org-journal-new-entry)
   ;;
   ;; Toggle workspaces forward/backwards
   (spacemacs/set-leader-keys "ow" 'eyebrowse-next-window-config)
   (spacemacs/set-leader-keys "oW" 'eyebrowse-last-window-config)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;; Revert buffer - loads in .dir-locals.el changes
+  (spacemacs/set-leader-keys "oR" 'revert-buffer)
+  ;;
+  ;; Keycast mode - show key bindings and commands in mode line
+  (spacemacs/set-leader-keys "ok" 'keycast-mode)
+
+  ;; Replace Emacs Tabs key bindings with Workspace key bindings
+  (with-eval-after-load 'evil-maps
+    (when (featurep 'tab-bar)
+      (define-key evil-normal-state-map "gt" nil)
+      (define-key evil-normal-state-map "gT" nil)))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Over-ride Spacemacs defaults
   ;;
-  ;;
   ;; Set new location for file bookmarks, SPC f b
   ;; Default: ~/.emacs.d/.cache/bookmarks
-  (setq bookmark-default-file "~/.spacemacs.d/bookmarks")
-  ;;
+  (setq bookmark-default-file "~/emacs/spacemacs-config/bookmarks")
   ;;
   ;; Set new location for recent save files
   ;; Default: ~/.emacs.d/.cache/recentf
-  (setq bookmark-default-file "~/.spacemacs.d/recentf")
-  ;;
+  (setq recentf-save-file  "~/emacs/spacemacs-config/recentf")
   ;;
   ;; native line numbers taking up lots of space?
   (setq-default display-line-numbers-width nil)
   ;;
-  ;;
   ;; replace / search with helm-swoop in Evil normal state
   (evil-global-set-key 'normal "/" 'helm-swoop)
   ;;
-  ;;
-  ;; Do not highlight trailing whitespace
-  ;; - whitespace deleted on save using: dotspacemacs-whitespace-cleanup 'all
-  (setq spacemacs-show-trailing-whitespace nil)
-  ;;
-  ;;
-  ;; Open ranger with the minus keybinding - not working
-  ;; Currently opens with deer
-  ;; (setq ranger-enter-with-minus t)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Magit - forge configuration
+  ;;
+  ;; Set the files that are searched for writing tokens
+  ;; by default ~/.authinfo will be used
+  ;; and write a token in unencrypted format
+  (setq auth-sources '("~/.authinfo.gpg"))
+  ;;
+  ;; Configure number of topics show, open and closed
+  ;; use negative number to toggle the view of closed topics
+  ;; using `SPC SPC forge-toggle-closed-visibility'
+  (setq  forge-topic-list-limit '(100 . -10))
+  ;; set closed to 0 to never show closed issues
+  ;; (setq  forge-topic-list-limit '(100 . 0))
+  ;;
+  ;; GitHub user and organization accounts owned
+  ;; used by @ c f  to create a fork
+  (setq forge-owned-accounts
+        '(("practicalli" "jr0cket"
+           "ClojureBridgeLondon" "ldnclj"
+           "clojure-hacks"
+           "reclojure")))
+  ;; To blacklist specific accounts,
+  ;; over-riding forge-owned-accounts
+  ;; (setq forge-owned-blacklist
+  ;;       '(("bad-hacks" "really-bad-hacks")))
+  ;;
+  ;; End of Magit - forge configuration
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Safe structural editing
@@ -835,14 +915,13 @@ before packages are loaded."
   ;;
   ;; Use Spacemacs as the $EDITOR (or $GIT_EDITOR) for git commits messages
   ;; when using git commit on the command line
-  (require 'git-commit)
-  (global-git-commit-mode t)
+  ;; (require 'git-commit)
   ;;
   ;; Set locations of all your Git repositories
   ;; with a number to define how many sub-directories to search
   ;; `SPC g L' - list all Git repositories in the defined paths,
   (setq magit-repository-directories
-        '(("~/.emacs.d"  . 0)
+        '(("~/emacs/spacemacs-config"  . 0)
           ("~/Code/" . 2)))
   ;;
   ;; end of version control configuration
@@ -860,8 +939,8 @@ before packages are loaded."
   (setq org-reveal-root "")
   ;;
   ;; Define the location of the file to hold tasks
-  (with-eval-after-load 'org
-    (setq org-default-notes-file "~/Dropbox/todo-list.org"))
+  ;; (with-eval-after-load 'org
+  ;;   (setq org-default-notes-file "~/Dropbox/todo-list.org"))
   ;;
   ;; Define a kanban style set of stages for todo tasks
   (with-eval-after-load 'org
@@ -914,13 +993,13 @@ before packages are loaded."
      (prettify-symbols-mode)))
   ;;
   ;; Markdown mode hook for orgtbl-mode minor mode
-  (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
+  ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
   ;;
   ;; Turn on visual-line-navigation for org-mode
-  (add-hook 'org-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+  ;; (add-hook 'org-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
   ;;
   ;; Turn on visual-line-numbers for org-mode
-  (add-hook 'org-mode-hook 'spacemacs/toggle-visual-line-numbers-on)
+  ;; (add-hook 'org-mode-hook 'spacemacs/toggle-visual-line-numbers-on)
   ;;
   ;; use org-re-reveal instead of org-reveal (which hasnt been updated in ages and breaks org-mode 9.2)
   ;; (use-package org-re-reveal :after org)
@@ -929,107 +1008,20 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Clojure configurations
   ;;
-  ;;
-  ;; CIDER 0.23 Lima release options
-  ;; Configure the position of evaluation result
-  ;; By default the result displays at the end of the current line
-  ;; Set cider-result-overlay-position to `at-point' to display results right after the expression evaluated
-  ;; Useful for evaluating nexsted expressions with `, e e'
-  (setq cider-result-overlay-position 'at-point)
-  ;;
-  ;;
-  ;; Pretty print in Clojure to use the Fast Idiomatic Pretty-Printer. This is approximately 5-10x faster than clojure.core/pprint
-  (setq cider-pprint-fn 'fipp)
-  ;;
-  ;;
-  ;; Indentation of function forms
-  ;; https://github.com/clojure-emacs/clojure-mode#indentation-of-function-forms
-  (setq clojure-indent-style 'align-arguments)
-  ;;
-  ;; Vertically align s-expressions
-  ;; https://github.com/clojure-emacs/clojure-mode#vertical-alignment
-  (setq clojure-align-forms-automatically t)
-  ;;
+  ;; Do not indent single ; comment characters
+  (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
+
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+
+  ;; Lookup functions in Clojure - The Essentail Reference book
+  ;; https://github.com/p3r7/clojure-essential-ref
+  (spacemacs/set-leader-keys "oh" 'clojure-essential-ref)
   ;;
-  ;;
-  ;; Local Clojure and Java sources
-  ;; Extract the clojure-x.x.x-sources.jar and Java src.zip files
-  ;; Extracted files enable use of search tools (ripgrep, ag).
-  ;; https://docs.cider.mx/cider/config/basic_config.html#_use_a_local_copy_of_the_java_source_code
-  ;; (setq cider-jdk-src-paths '("~/projects/java/clojure-1.10.1-sources"
-  ;;                             "~/projects/java/openjdk-11/src"))
-  ;;
-  ;;
-  ;; anakondo - static analysis using clj-kondo
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; https://github.com/didibus/anakondo
-  ;; Provides auto-completion without the need for a REPL
-  ;; Add anakondo to `dotspacemacs-additional-packages` list
-  ;;
-  ;; `SPC SPC anakondo-minor-mode' to run manually for the current project.
-  ;;
-  ;; Commented until static analysis is an optional or background process
-  ;; https://github.com/didibus/anakondo/issues/1
-  ;;
-  ;; Lazy load of anakondo until Clojure buffer is used
-  ;; (autoload 'anakondo-minor-mode "anakondo")
-  ;;
-  ;; Enable anakondo-minor-mode in all Clojure buffers
-  ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
-  ;; Enable anakondo-minor-mode in all ClojureScript buffers
-  ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
-  ;; Enable anakondo-minor-mode in all cljc buffers
-  ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
-  ;;
-  ;;
-  ;;
-  ;; LSP server for Clojure with clj-kondo
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; An alternative approach to the Clojure layer variable clojure-enable-linters 'clj-kondo
-  ;; for those environments where the clj-kondo binary does not run (eg. graal).
-  ;; Uses a custom script to run the clj-kondo-lsp-server.jar which should be added
-  ;; to the operating system path and include:
-  ;; java -jar ~/path/to/clj-kondo-lsp-server-standalone.jar
-  ;; (use-package lsp-mode
-  ;;   :ensure t
-  ;;   :hook ((clojure-mode . lsp))
-  ;;   :commands lsp
-  ;;   :custom ((lsp-clojure-server-command '("clojure-lsp-server-clj-kondo")))
-  ;;   :config (dolist  (m '(clojure-mode clojurescript-mode))
-  ;;             (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
-  ;;
-  ;;
-  ;; TODO: review this binding - gives poor user experience
-  ;; Multi-line editing in the REPL buffer
-  ;; `RTN` creates a new line, `C-RTN` evaluates the code
-  ;; Multi-line editing in the REPL buffer
-  ;; (add-hook 'cider-repl-mode-hook
-  ;;           '(lambda ()
-  ;;              (define-key cider-repl-mode-map (kbd "RET") #'cider-repl-newline-and-indent)
-  ;;              (define-key cider-repl-mode-map (kbd "C-<return>") #'cider-repl-return)))
-  ;;
-  ;;
-  ;; TODO: review this binding
-  ;; repl history keybindings - not used - use s-<up> and s-<down> which are the defaults
-  ;; (add-hook 'cider-repl-mode-hook
-  ;;           '(lambda ()
-  ;;              (define-key cider-repl-mode-map (kbd "<up>") 'cider-repl-previous-input)
-  ;;              (define-key cider-repl-mode-map (kbd "<down>") 'cider-repl-next-input)))
-  ;;
-  ;;
-  ;; hook for command-line-mode - shows keybindings & commands in separate buffer
-  ;; load command-line-mode when opening a clojure file
-  ;; (add-hook 'clojure-mode-hook 'command-log-mode)
-  ;;
-  ;; turn on command-log-mode when opening a source code or text file
-  ;; (add-hook 'prog-mode-hook 'command-log-mode)
-  ;; (add-hook 'text-mode-hook 'command-log-mode)
   ;;
   ;; toggle reader macro sexp comment
   ;; toggles the #_ characters at the start of an expression
@@ -1052,16 +1044,8 @@ before packages are loaded."
   ;; Assign keybinding to the toggle-reader-comment-sexp function
   (define-key global-map (kbd "C-#") 'clojure-toggle-reader-comment-sexp)
   ;;
-  ;; Evaluate code when it is contained in a (comment (,,,))
-  ;; 24th sept - didnt work, even after updating spacemacs and packages
-  ;; (setq cider-eval-toplevel-inside-comment-form t)
-  ;;
-  ;; (add-hook 'clojure-mode-hook
-  ;;           '(setq cider-eval-toplevel-inside-comment-form t))
-  ;;
   ;;
   ;; Toggle view of a clojure `(comment ,,,) block'
-  ;;
   (defun clojure-hack/toggle-comment-block (arg)
     "Close all top level (comment) forms. With universal arg, open all."
     (interactive "P")
@@ -1075,38 +1059,6 @@ before packages are loaded."
   (evil-define-key 'normal clojure-mode-map
     "zC" 'clojure-hack/toggle-comment-block
     "zO" (lambda () (interactive) (clojure-hack/toggle-comment-block 'open)))
-  ;;
-  ;;
-  ;; Experiment: Start Clojure REPL with a specific profile
-  ;; https://stackoverflow.com/questions/18304271/how-do-i-choose-switch-leiningen-profiles-with-emacs-nrepl
-  ;;
-  ;; (defun start-cider-repl-with-profile ()
-  ;;   (interactive)
-  ;;   (letrec ((profile (read-string "Enter profile name: "))
-  ;;            (lein-params (concat "with-profile +" profile " repl :headless")))
-  ;;     (message "lein-params set to: %s" lein-params)
-  ;;     (set-variable 'cider-lein-parameters lein-params)
-  ;;     (cider-jack-in)))
-  ;;
-  ;; My altered more idiomatic version, hopefully
-  ;; - seems to be a bug...
-  ;; (defun start-cider-repl-with-profile (profile)
-  ;;   (interactive "sEnter profile name: ")
-  ;;   (letrec ((lein-params (concat "with-profile +" profile " repl :headless")))
-  ;;     (message "lein-params set to: %s" lein-params)
-  ;;     (set-variable 'cider-lein-parameters lein-params)
-  ;;     (cider-jack-in)))
-  ;;
-  ;;
-  ;; Hook for command-log-mode
-  ;; shows keybindings & commands in separate buffer
-  ;; Load command-log-mode when opening a clojure file
-  ;; (add-hook 'clojure-mode-hook 'command-log-mode)
-  ;;
-  ;; Turn on command-log-mode when opening a source code or text file
-  ;; (add-hook 'prog-mode-hook 'command-log-mode)
-  ;; (add-hook 'text-mode-hook 'command-log-mode)
-  ;;
   ;;
   ;; end of clojure configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1126,7 +1078,6 @@ before packages are loaded."
   ;;
   ;; End of Web-mode configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Eshell visual enhancements
@@ -1164,35 +1115,10 @@ before packages are loaded."
             eshell-prompt-string))
   ;;
   ;;
-  ;; Looking for unicode icons on Emacs
+  ;; Unicode icons on Emacs
   ;; `list-character-sets' and select unicode-bmp
   ;; scroll through bitmaps list to find the one you want
   ;; some bitmaps seem to change
-  ;;
-  ;; "\x26A5 "  (female-male symbol)
-  ;; "\xf394"   (non-binary)
-  ;; "\xf105"     (docker - changes)
-  ;; "\xf105"   (leiningen - changes)
-  ;; "\xe919"   (clojure logo - ??)
-  ;; "\xf104"   (clojurescript logo - changes)
-  ;; "\xf09b"   (github octocat)
-  ;; "\xf397"  (git branch)
-  ;; "\xf126"    (was git fork, changes..)
-  ;; "\xf1d3"  ;  (git icon - changes)
-  ;; "\xf5b0"   (git merge)
-  ;; "\xf07b" 
-  ;; "\xf114"   (closed folder - changes)
-  ;; "\xf115"   (open folder - changes)
-  ;; "\xf074" 
-  ;; "\xe97c" 
-  ;; "\xe943"  
-  ;; "\xe566"  
-  ;; "\xe422"  
-  ;; "\xe907"  ; 
-  ;; "\xe91b"  ;  
-  ;; "\xf126"    (was git fork, changes..)
-  ;; "\xf1d3"  ;  (git icon - changes)
-  ;;
   ;;
   (esh-section esh-dir
                "\xf07c"  ;  (faicon folder)
@@ -1251,7 +1177,6 @@ before packages are loaded."
   ;; End of Eshell
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell configuration
   ;;
@@ -1261,73 +1186,63 @@ before packages are loaded."
   ;; End of Shell configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; MacOSX
   ;; Disable touchpad zoom gestures
   ;;
-  ;; (define-key global-map (kbd "<magnify-up>") nil)
-  ;; (define-key global-map (kbd "<magnify-down>") nil)
-  ;;
-  ;; (defun practicalli-nothing ()
-  ;;   (interactive)
-  ;;   (message "Buttons are not toys") )
-  ;;
-  ;; (define-key global-map (kbd "<magnify-up>") 'practicalli-nothing)
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (define-key global-map (kbd "<magnify-up>") nil)
+  (define-key global-map (kbd "<magnify-down>") nil)
 
+  (defun practicalli-nothing ()
+    (interactive)
+    (message "Buttons are not toys") )
 
-
-  ;; Hacking spacebind
-  ;; TODO: How to over-ride name of spacebind defined key?
-  ;; The following does not work
-  ;; (spacemacs/set-leader-keys "b C-d" 'spacemacs/kill-matching-buffers-rudely "Hackme")
-  ;; (spacemacs/set-leader-keys "b C-d" 'spacemacs/kill-matching-buffers-rudely "Hackme")
-
-  ;; (spacemacs|spacebind
-  ;;  "Encrypt / decrypt files with Easy PG"
-  ;;  :global
-  ;;  (("b" "Buffers"
-  ;;    ("C-d" spacemacs/kill-matching-buffers-rudely "Rudely"))))
-
-;; (spacemacs|spacebind
-;;  "Compare buffers, files and directories."
-;;  :global
-;;  (("TAB" spacemacs/alternate-buffer "Last buffer")
-;;   ("b" "Buffers"
-;;    ("C-e" spacemacs/kill-matching-buffers-rudely "Kill rudely..."))))
-
-
-  ;; (spacemacs|spacebind
-  ;;  "Encrypt / decrypt files with Easy PG"
-  ;;  :global
-  ;;  (("a" "applications"
-  ;;    ("g"  "easy pg"
-  ;;     ("d" epa-decrypt-file "Decrypt file to...")
-  ;;     ("D" epa-delete-keys  "Delete keys...")
-  ;;     ("e" epa-encrypt-file "Encrypt file...")
-  ;;     ("i" epa-insert-keys  "Insert keys...")
-  ;;     ("k" epa-list-keys "List keys...")
-  ;;     ("K" epa-list-secret-keys "List secret keys...")
-  ;;     ("x" epa-export-keys "Export keys...")
-  ;;     ("s"  "sign"
-  ;;      ("f" epa-sign-file "Sign file...")
-  ;;      ("m" epa-sign-mail "Sign mail...")
-  ;;      ("r" epa-sign-region "Sign region..."))
-  ;;     ("v"  "verify"
-  ;;      ("f" epa-verify-file "Verify file...")
-  ;;      ("r" epa-verify-region "Verify region...")
-  ;;      ("c" epa-verify-cleartext-in-region "Verify cleartext region..."))))))
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; (add-hook 'persp-mode-hook
-  ;;           (lambda ()
-  ;;             (persp-load-state-from-file (expand-file-name "~/.emacs.d/.cache/layouts/persp-my-layout"))))
+  (define-key global-map (kbd "<magnify-up>") 'practicalli-nothing)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Spaceline Doom theme settings
+  ;; https://seagle0128.github.io/doom-modeline/
+  ;; Configuration set in layer variables
+  ;;
+  ;; Set height of the modeline - will resize to height of text
+  ;; (setq doom-modeline-height 12)
+
+  ;; The left hand bar in the modeline
+  ;; setting to zero shows a large box outline
+  ;; (setq doom-modeline-bar-width 1)
+
+  ;; Determine style of current filename / path displayed
+  ;; default: auto
+  ;; (setq doom-modeline-buffer-file-name-style 'relative-to-project)
+
+  ;; default perspective name displayed in the mode-line.
+  ;; (setq doom-modeline-display-default-persp-name t)
+
+  ;; Do not show buffer encoding
+  ;; (setq doom-modeline-buffer-encoding nil)
+
+  ;; display GitHub notifications (requires `ghub' package)
+  ;; (setq doom-modeline-github t)
+  ;; The interval of checking GitHub.
+  ;; (setq doom-modeline-github-interval (* 30 60))
+
+  ;; GNUs notifications - default t
+  ;; (setq doom-modeline-gnus nil)
+
+  ;; IRC notifications - default t
+  ;; (setq doom-modeline-irc nil)
+
+  ;; Environment versions - default t
+  ;; (setq doom-modeline-env-version t)
+
+  ;; Use ascii rather than icon for modal state (more specific)
+  ;; Icon not changing for doom-solarized-light theme
+  ;; - icon changes color for doom-gruvbox-light theme
+  ;; (setq doom-modeline-modal-icon nil)
+  ;; End of Spaceline Doom theme settings
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1337,6 +1252,14 @@ before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Workarounds and bug fixes - temporary hopefully
+  ;;
+  ;; From a community question - not advisable
+  ;; Set a different key binding for evil lisp state
+  ;; (with-eval-after-load 'evil-lisp-state
+  ;;   (spacemacs/set-leader-keys "k" evil-lisp-state-map))
+  ;;
+  ;; evil-escape - switch between insert and normal state
+  ;; (setq-default evil-escape-key-sequence "fd")
   ;;
   ;; Undo history size limit, triggering garbage collection
   ;; Updating all defaults by a power of 10 (adding another zero at the end)
@@ -1361,151 +1284,6 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Which-key now using a different sorting order for keybindings
-  ;; which-key-sort-order 'which-key-prefix-then-key-order
-  ;; https://github.com/syl20bnr/spacemacs/commit/ab3511cfb55aadaa7a13be03356917cca3071c02
-  ;; (setq which-key-sort-order 'which-key-key-order-alpha)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Spell checking
-  ;; merged into Spacemacs `develop'
-  ;;
-  ;; Add keybinding to correct current word under the cursor
-  ;; to the existing spelling menu, `S'
-  ;; (spacemacs/set-leader-keys "Ss" 'flyspell-correct-at-point)
-  ;;
-  ;; Or in the user-binding menu
-  ;; (spacemacs/set-leader-keys "os" 'flyspell-correct-at-point)
-  ;;
-  ;; Documentation:
-  ;; http://develop.spacemacs.org/doc/DOCUMENTATION.html#binding-keys
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Redundant configurations - Clojure
-  ;;
-  ;; disable the new enhanced ClojureScript code completion
-  ;; Use the ClojureScript completion from earlier versions of CIDER if enhanced cljs completion is causing issues
-  ;;
-  ;; (setq cider-enhanced-cljs-completion-p nil)
-  ;;
-  ;; End of CIDER 0.23 Lima release options
-  ;;
-  ;;
-  ;; In clojure-mode, treat hyphenated words as a single word.
-  ;; Using `w' in Evil normal words gets stuck on names containing `->'
-  ;; (add-hook 'clojure-mode-hook #'(lambda () (modify-syntax-entry ?- "w")))
-  ;; (add-hook 'clojure-mode-hook #'(lambda ()
-  ;;                                  (dolist (c (string-to-list "-_>?:"))
-  ;;                                    (modify-syntax-entry c "w"))))
-  ;;
-  ;; Alternative approach - using subword-mode
-  ;;
-  ;; Enabling CamelCase support for editing commands
-  ;; https://cider.readthedocs.io/en/latest/additional_packages/#subword-mode
-  ;; (add-hook 'cider-repl-mode-hook #'subword-mode)
-  ;;
-  ;;
- ;;
-  ;;
-  ;;
-  ;; Linting with clj-kondo
-  ;; https://github.com/borkdude/clj-kondo/blob/master/doc/editor-integration.md#spacemacs
-  ;;
-  ;; Using clj-kondo by itself
-  ;; (use-package clojure-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (require 'flycheck-clj-kondo))
-
-  ;; Using clj-kondo with joker
-  ;; (use-package clojure-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (require 'flycheck-joker)
-  ;;   (require 'flycheck-clj-kondo)
-  ;;   (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
-  ;;     (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
-  ;;   (dolist (checkers '((clj-kondo-clj . clojure-joker)
-  ;;                       (clj-kondo-cljs . clojurescript-joker)
-  ;;                       (clj-kondo-cljc . clojure-joker)
-  ;;                       (clj-kondo-edn . edn-joker)))
-  ;;     (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
-
-
-  ;; TODO: Spacemacs pull request with these keybindings, updating REPL intro text with details
-  ;; You can remove this message with the <M-x cider-repl-clear-help-banner> command.
-  ;; You can disable it from appearing on start by setting
-  ;; ‘cider-repl-display-help-banner’ to nil.
-  ;; Cannot set the banner to another text, its hard coded in CIDER code.
-  ;; (setq cider-repl-display-help-banner "Evaluate in the source code buffer for fun and profit!")
-
-
-  ;; Merged into develop
-  ;; (spacemacs/set-leader-keys-for-major-mode 'clojure "ei" 'cider-interrupt)
-
-  ;; Experiment: Turn on all font locking options for Clojure
-  ;; (setq cider-font-lock-dynamically t)
-  ;;
-  ;; configure clojurescript-jack-in to use the helper functions provided by lein-figwheel template
-  ;; https://github.com/bhauman/lein-figwheel
-  ;; fig-start will start figwheel and compile the clojurescript application
-  ;; cljs-repl will connect emacs buffer to clojurescript repl created by figwheel
-  ;;
-  ;;
-  ;; TODO: review this binding - CIDER takes care of this now
-  ;; without this configuration, emacs command clojurescript-jack-in defaults to jvm rhino repl
-  ;; if using a different clojurescript template you may require different function calls in the do expression
-  ;; alternatively: set via m-x customize-variable cider-cljs-lein-repl
-  ;; TODO: Is cider-cljs-lein-repl still required to be set?
-  ;; Or is this just specific to those projects that have a user/fig-start and user/cljs-repl functions
-  ;; (setq cider-cljs-lein-repl
-  ;;      "(do
-  ;;         (user/fig-start)
-  ;;         (user/cljs-repl))")
-  ;;
-  ;; if you are not using figwheel template to configure funcitons in dev/core.clj
-  ;; then use the full function calls
-  ;; (setq cider-cljs-lein-repl
-  ;;       "(do (require 'figwheel-sidecar.repl-api)
-  ;;          (figwheel-sidecar.repl-api/start-figwheel!)
-  ;;          (figwheel-sidecar.repl-api/cljs-repl))")
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; unwanted features / bug workarounds
-  ;;
-  ;; opening recent files on spacemacs home page with mouse click
-  ;; pastes contents of kill ring once file is open
-  ;;
-  ;; (define-key spacemacs-buffer-mode-map [down-mouse-1] nil)
-  ;;
-  ;;
-  ;; (define-key global-map (kbd "C-#") 'clojure-toggle-reader-comment-sexp)
-  ;;
-  ;; (define-key global-map (kbd "SPC S s") 'flyspell-correct-at-point)
-  ;;
-  ;; (define-key markdown-mode-map (kbd "SPC S s") #'flyspell-correct-at-point)
-  ;;
-  ;; helm opens a new frame when cursor in a buffer positioned underneath another
-  ;; see my gist for details to add...
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; elpa stable repository
-  ;; if you want to disable the elpa stable repository put this in your dotfile in the user-init function:
-  ;; (setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
-  ;;   ("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Literal Searching Configuration
   ;;
   ;; Literal search, rather than regex, in spacemacs search - helm-ag
@@ -1513,36 +1291,6 @@ before packages are loaded."
   ;;
   ;; End of Searching Configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; evil-cleverparens - now part of the clojure layer (develop branch)
-  ;;
-  ;; use the evil-cleverparens layer
-  ;; https://github.com/luxbock/evil-cleverparens
-  ;;
-  ;; add evil-cleverparens to clojure-mode
-  ;; (spacemacs/toggle-evil-cleverparens-on)
-  ;; (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
-  ;; end of evil-smartparens
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; exclude sayid as it currently does not support nrepl 0.4
-  ;;
-  ;; Temporary fix
-  ;; (setq sayid-inject-dependencies-at-jack-in nil)
-  ;; issue raised: https://github.com/syl20bnr/spacemacs/issues/11146
-  ;;
-  ;; pull request merged into develop to switch sayid off by default
-  ;; https://github.com/bpiel/sayid/pull/40
-  ;; enable sayid by adding this code to the .spacemacs dotspacemacs/layers configuration
-  ;;   dotspacemacs-configuration-layers
-  ;;    '(
-  ;;       (clojure :variables clojure-enable-sayid t)
-  ;;     )
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Systemd user service
@@ -1595,7 +1343,6 @@ before packages are loaded."
   ;; end of old-school bindings
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
   )   ;; End of dot-spacemacs/user-config
 
 
@@ -1613,17 +1360,12 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(org-roam realgud test-simple loc-changes load-relative company-plsense evil-collection visual-regexp insert-shebang flycheck-bashate fish-mode company-shell seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake minitest enh-ruby-mode cfrs chruby bundler inf-ruby toml-mode ron-mode racer helm-gtags ggtags flycheck-rust dap-mode posframe lsp-treemacs bui lsp-mode dash-functional counsel-gtags counsel swiper ivy cargo rust-mode yasnippet-snippets yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-mode rainbow-identifiers rainbow-delimiters pug-mode prettier-js popwin pcre2el password-generator paradox ox-twbs ox-gfm overseer orgit org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-brain open-junk-file nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-section magit-gitflow macrostep lorem-ipsum link-hint json-navigator json-mode indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy forge font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-package flycheck-elsa flycheck-clj-kondo flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-themes dired-quick-sort diminish diff-hl devdocs define-word csv-mode company-web company-statistics company-quickhelp company-emoji command-log-mode column-enforce-mode color-identifiers-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
- '(reb-re-syntax 'string)
- '(safe-local-variable-values
-   '((nrepl-sync-request-timeout . 99999999999999999999999999999)
-     (javascript-backend . tide)
-     (javascript-backend . tern)
-     (javascript-backend . lsp))))
+   '(dap-mode bui yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements password-generator paradox ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-brain open-junk-file npm-mode nose nodejs-repl nameless multi-term multi-line mmm-mode minitest markdown-toc magit-section macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint ligature keycast json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide importmagic impatient-mode hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag haskell-snippets grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort diminish diff-hl devdocs define-word dante cython-mode csv-mode company-web company-statistics company-shell company-reftex company-quickhelp company-plsense company-math company-emoji company-cabal company-auctex company-anaconda command-log-mode column-enforce-mode color-identifiers-mode cmm-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(mode-line ((t (:height 0.92))))
+ '(mode-line-inactive ((t (:height 0.92)))))
 )
