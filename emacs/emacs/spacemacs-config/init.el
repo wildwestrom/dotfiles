@@ -1198,6 +1198,8 @@ before packages are loaded."
     (message "Buttons are not toys") )
 
   (define-key global-map (kbd "<magnify-up>") 'practicalli-nothing)
+
+  (setq frame-resize-pixelwise t)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
