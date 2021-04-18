@@ -138,15 +138,16 @@ This function should only modify configuration layer settings."
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
-          lsp-enable-symbol-highlighting t
+          lsp-enable-symbol-highlighting nil
 
           ;; Show lint error indicator in the mode-bar (tested on doom-modeline)
-          lsp-modeline-diagnostics-enable t
+          lsp-modeline-diagnostics-enable nil
+          lsp-sideline-show-diagnostics nil
 
           ;; popup documentation boxes
           lsp-ui-doc-enable nil          ;; disable all doc popups
           lsp-ui-doc-show-with-cursor nil   ;; doc popup for cursor
-          ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
+          lsp-ui-doc-show-with-mouse nil   ;; doc popup for mouse
           lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
 
           ;; code actions and diagnostics text as right-hand side of buffer
@@ -226,7 +227,7 @@ This function should only modify configuration layer settings."
      ;; Spell as you type with Flyspell package,
      ;; requires external command - ispell, hunspell, aspell
      ;; SPC S menu, SPC S s to check current word
-      spell-checking
+     ;; spell-checking
 
      ;; Use original flycheck fringe bitmaps
      (syntax-checking :variables
@@ -248,7 +249,7 @@ This function should only modify configuration layer settings."
      ;; 'prog-mode for only programming languages
      ;; including text-mode may cause issues with org-mode and magit
      (unicode-fonts :variables
-                    unicode-fonts-enable-ligatures t
+                    unicode-fonts-enable-ligatures nil
                     unicode-fonts-ligature-modes '(prog-mode))
 
      ;; Highlight changes in buffers
@@ -336,7 +337,7 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1024 1024 32) ;; 32 MB
+   dotspacemacs-read-process-output-max (* 1024 1024) ;; 1 MB
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
