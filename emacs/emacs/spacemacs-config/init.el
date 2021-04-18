@@ -64,7 +64,7 @@ This function should only modify configuration layer settings."
               ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
-              clojure-indent-style 'align-arguments
+              ;; clojure-indent-style 'align-arguments
               clojure-align-forms-automatically t
               clojure-toplevel-inside-comment-form t  ;; evaluate expressions in comment as top level
               cider-result-overlay-position 'at-point ;; results shown right after expression
@@ -160,7 +160,9 @@ This function should only modify configuration layer settings."
           treemacs-space-between-root-nodes nil
 
           ;; Optimization for large files
-          lsp-file-watch-threshold 10000)
+          lsp-file-watch-threshold 10000
+
+          lsp-idle-delay 0.500)
 
      (markdown :variables
                markdown-live-preview-engine 'vmd)
@@ -337,7 +339,7 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1024 1024) ;; 1 MB
+   dotspacemacs-read-process-output-max (* 1024 1024 4) ;; 4 MB
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -419,7 +421,7 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
 
    dotspacemacs-themes '(doom-solarized-dark
-                         doom-solarized-light)
+                         doom-one-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -1021,7 +1023,7 @@ before packages are loaded."
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  ;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   ;; Lookup functions in Clojure - The Essentail Reference book
   ;; https://github.com/p3r7/clojure-essential-ref
