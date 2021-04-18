@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 #name : div-with-class
 #key : div-with-class
-#contributor : jr0cket
+#contributor : jr0cket, wildwestrom
 # --
-[:div {:class "$1"}]
+[:div {:class '[$1]}]
