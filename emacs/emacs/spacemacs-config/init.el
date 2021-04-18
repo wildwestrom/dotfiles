@@ -144,7 +144,7 @@ This function should only modify configuration layer settings."
           lsp-modeline-diagnostics-enable t
 
           ;; popup documentation boxes
-          ;; lsp-ui-doc-enable nil          ;; disable all doc popups
+          lsp-ui-doc-enable nil          ;; disable all doc popups
           lsp-ui-doc-show-with-cursor nil   ;; doc popup for cursor
           ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
           lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
@@ -153,7 +153,7 @@ This function should only modify configuration layer settings."
           lsp-ui-sideline-enable nil
 
           ;; reference count for functions (assume their maybe other lenses in future)
-          lsp-lens-enable t
+          lsp-lens-enable nil
 
           ;; Efficient use of space in treemacs-lsp display
           treemacs-space-between-root-nodes nil
@@ -174,7 +174,7 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-want-todo-bindings t
           org-enable-org-journal-support t
-          org-journal-dir "~/projects/journal/"
+          org-journal-dir "~/Documents/org/Notes/Journal"
           org-journal-file-format "%Y-%m-%d"
           org-journal-date-prefix "#+TITLE: "
           org-journal-date-format "%A, %B %d %Y"
@@ -336,7 +336,7 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1024 1024 128) ;; 128 MB
+   dotspacemacs-read-process-output-max (* 1024 1024 32) ;; 32 MB
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -733,6 +733,10 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; GC Messages
+  (setq garbage-collection-messages t)
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
