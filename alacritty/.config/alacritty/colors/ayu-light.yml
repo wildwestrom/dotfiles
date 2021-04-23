@@ -1,0 +1,28 @@
+# ayu-light
+colors:
+  # Default colors
+  primary:
+    background: '0xfafafa'
+    foreground: '0x5b6672'
+
+  # Normal colors
+  normal:
+    black:   '0x000000'
+    red:     '0xf2590b'
+    green:   '0x76cc00'
+    yellow:  '0xf29717'
+    blue:    '0x41a5d9'
+    magenta: '0x9965cc'
+    cyan:    '0x4dbf98'
+    white:   '0xc7c7c7'
+
+  # Bright colors
+  bright:
+    black:   '0x676767'
+    red:     '0xd6646a'
+    green:   '0xa3d900'
+    yellow:  '0xe7c446'
+    blue:    '0x6871ff'
+    magenta: '0xa37acc'
+    cyan:    '0x56d9ad'
+    white:   '0xfeffff'

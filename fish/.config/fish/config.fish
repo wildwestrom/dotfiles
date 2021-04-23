@@ -3,12 +3,14 @@
 # Remove default greeting
 set fish_greeting
 
+## Path Variables
+
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 
-set -g fish_user_paths "$HOME/homebrew/bin" $fish_user_paths
-set -g fish_user_paths "$HOME/homebrew/sbin" $fish_user_paths
+set -gx PATH "$HOME/homebrew/bin"  $PATH
+set -gx PATH "$HOME/homebrew/sbin" $PATH
 
 set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 
@@ -23,9 +25,9 @@ set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
 set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 # Latex Variables
-set -gx PATH "/usr/local/texlive/2020/bin/x86_64-darwin/" $PATH
-set -gx MANPATH "/usr/local/texlive/2020/texmf-dist/doc/man" $MANPATH
-set -gx INFOPATH "/usr/local/texlive/2020/texmf-dist/doc/info" $INFOPATH
+set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
+set -gx MANPATH "/usr/local/texlive/2021/texmf-dist/doc/man" $MANPATH
+set -gx INFOPATH "/usr/local/texlive/2021/texmf-dist/doc/info" $INFOPATH
 
 # Adds `~/.local/bin` to $PATH
 set -gx PATH "$HOME/.local/bin" $PATH
@@ -55,6 +57,8 @@ set -gx PATH "$HOME/emacs/doom-emacs/bin" $PATH
 # Node.js npm
 set -gx NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
 set -gx PATH "$NPM_CONFIG_PREFIX/bin" $PATH
+
+# Python Paths
 
 # Default programs:
 set -gx EDITOR "nvim"
@@ -125,13 +129,22 @@ alias xclip="xclip -selection c"
 alias vimrc='cd $XDG_CONFIG_HOME/nvim/'
 alias fishrc='$EDITOR $XDG_CONFIG_HOME/fish/config.fish'
 alias tmuxrc='$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf'
-alias termrc='$EDITOR $XDG_CONFIG_HOME/alacritty/alacritty.yml'
 alias dotfiles='lazygit -w $HOME/.dotfiles/'
+
+# Alacritty
+alias termrc='$EDITOR $XDG_CONFIG_HOME/alacritty/alacritty.yml'
+
+set ALACRITTY_DARKTHEME 'solarized-dark.yml'
+set ALACRITTY_LIGHTTHEME 'ayu-light.yml'
+alias termcolor-light='alacritty-colorscheme apply $ALACRITTY_LIGHTTHEME'
+alias termcolor-dark='alacritty-colorscheme apply $ALACRITTY_DARKTHEME'
+alias termcolor-toggle='alacritty-colorscheme toggle $ALACRITTY_LIGHTTHEME $ALACRITTY_DARKTHEME'
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
 # Starship prompt
 starship init fish | source
+
 
 # Vi bindings
 fish_vi_key_bindings
