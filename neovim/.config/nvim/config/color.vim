@@ -1,7 +1,8 @@
 " Coloring
 " theme
-set background=dark
-colorscheme "solarized8"
+if has('termguicolors')
+  set termguicolors
+endif
 
 " misc
 highlight Pmenu guibg='#00010a' guifg=white             " popup menu colors
