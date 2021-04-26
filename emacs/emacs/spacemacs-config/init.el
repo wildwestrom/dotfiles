@@ -64,7 +64,7 @@ This function should only modify configuration layer settings."
               ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
-              ;; clojure-indent-style 'align-arguments
+              clojure-indent-style 'align-arguments
               clojure-align-forms-automatically t
               clojure-toplevel-inside-comment-form t  ;; evaluate expressions in comment as top level
               cider-result-overlay-position 'at-point ;; results shown right after expression
@@ -114,14 +114,10 @@ This function should only modify configuration layer settings."
      ;;        gtags-enable-by-default t)
 
      haskell
-
-     ;; helm-follow-mode sticky - remembers use of C-c C-f
-     ;; - follow mode previews when scrolling through a helm list
-     ;; (setq helm-follow-mode-persistent t)
-     (helm :variables
-           helm-follow-mode-persistent t)
-
      html
+
+     ivy
+
      javascript
      json
 
@@ -138,10 +134,11 @@ This function should only modify configuration layer settings."
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
-          lsp-enable-symbol-highlighting nil
+          lsp-enable-symbol-highlighting t
 
           ;; Show lint error indicator in the mode-bar (tested on doom-modeline)
-          lsp-modeline-diagnostics-enable nil
+          lsp-modeline-diagnostics-enable t
+          ;; disable doc popup for cursor
           lsp-sideline-show-diagnostics nil
 
           ;; popup documentation boxes
@@ -154,7 +151,7 @@ This function should only modify configuration layer settings."
           lsp-ui-sideline-enable nil
 
           ;; reference count for functions (assume their maybe other lenses in future)
-          lsp-lens-enable nil
+          lsp-lens-enable t
 
           ;; Efficient use of space in treemacs-lsp display
           treemacs-space-between-root-nodes nil
@@ -162,7 +159,9 @@ This function should only modify configuration layer settings."
           ;; Optimization for large files
           lsp-file-watch-threshold 10000
 
-          lsp-idle-delay 0.500)
+          lsp-idle-delay 0.500
+
+          lsp-log-io nil)
 
      (markdown :variables
                markdown-live-preview-engine 'vmd)
@@ -173,6 +172,7 @@ This function should only modify configuration layer settings."
 
      (org :variables
           org-enable-github-support t
+          org-enable-asciidoc-support t
           org-enable-bootstrap-support t
           org-enable-reveal-js-support t
           org-want-todo-bindings t
@@ -184,6 +184,8 @@ This function should only modify configuration layer settings."
           org-journal-time-prefix "* "
           org-journal-time-format ""
           org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\"")
+
+     ;; TODO Figure out how org-roam works.
 
      perl5
      python
@@ -259,6 +261,8 @@ This function should only modify configuration layer settings."
      (version-control :variables
                       version-control-diff-tool 'diff-hl
                       version-control-global-margin t)
+
+     vimscript
 
      yaml
 
@@ -420,8 +424,8 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
 
-   dotspacemacs-themes '(doom-solarized-dark
-                         doom-one-light)
+   dotspacemacs-themes '(doom-one-light
+                         doom-one)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -740,14 +744,18 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; GC Messages
   (setq garbage-collection-messages t)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Disable truncate lines globally
+  (setq truncate-lines nil)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keeping Helm history clean
-  (setq history-delete-duplicates t)
-  (setq extended-command-history
-        (delq nil (delete-dups extended-command-history)))
-
+  ;; (setq history-delete-duplicates t)
+  ;; (setq extended-command-history
+  ;;       (delq nil (delete-dups extended-command-history)))
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -863,8 +871,8 @@ before packages are loaded."
   ;; native line numbers taking up lots of space?
   (setq-default display-line-numbers-width nil)
   ;;
-  ;; replace / search with helm-swoop in Evil normal state
-  (evil-global-set-key 'normal "/" 'helm-swoop)
+  ;; replace / search with ivy-swiper in Evil normal state
+  (evil-global-set-key 'normal "/" 'swiper)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1023,7 +1031,7 @@ before packages are loaded."
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-  ;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   ;; Lookup functions in Clojure - The Essentail Reference book
   ;; https://github.com/p3r7/clojure-essential-ref
