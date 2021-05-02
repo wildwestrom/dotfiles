@@ -143,10 +143,6 @@ alias termcolor-toggle='alacritty-colorscheme toggle $ALACRITTY_LIGHTTHEME $ALAC
 
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
-# Starship prompt
-starship init fish | source
-
-
 # Vi bindings
 fish_vi_key_bindings
 set vi_mode_default vi_mode_normal
