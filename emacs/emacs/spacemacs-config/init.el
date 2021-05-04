@@ -41,24 +41,21 @@ This function should only modify configuration layer settings."
      ;;
      ;; Layers added in alphabetic order
 
-
-     ;; Enable asciidoc layer for editing asciidoc content
-     ;; Useful for docs.cider.mx editing
+     ;; Enable asciidoc layer for editing asciidoc content e.g. docs.cider.mx editing
      asciidoc
 
      ;; Add tool tips to show doc string of functions
-     ;; Show snippets in the autocompletion popup
+     ;; Show snippets in the auto-completion popup
      ;; Show suggestions by most commonly used
      (auto-completion :variables
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t)
+
      ;; To have auto-completion on as soon as you start typing
      ;; (auto-completion :variables auto-completion-idle-delay nil)
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
-
-     ;; Clojure specific configuration in dotspacemacs/user-config
      (clojure :variables
               ;; clojure-backend 'cider               ;; use cider and disable lsp
               ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
@@ -72,16 +69,14 @@ This function should only modify configuration layer settings."
               cider-repl-buffer-size-limit 100        ;; limit lines shown in REPL buffer
               )
 
-     ;; Nyan cat tells you where you are in your file
-     ;; :variables
-     ;; colors-enable-nyan-cat-progress-bar (display-graphic-p)
+     ;; Nyan cat indicating relative position in current buffer
+     ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
      colors
 
      ;; SPC a L displays key and command history in a separate buffer
      command-log
 
-     ;; Tools to work with comma separate values
-     ;; Used for data science files
+     ;; Tools to work with comma separate values e.g. data science data
      ;; https://develop.spacemacs.org/layers/+lang/csv/README.html
      csv
 
@@ -92,7 +87,7 @@ This function should only modify configuration layer settings."
      emoji
 
      ;; SPC g s opens Magit git client full screen (q restores previous layout)
-     ;; refine hunk 'all highlights characters changed on each line
+     ;; show word-granularity differences in current diff hunk
      (git :variables
           git-magit-status-fullscreen t
           magit-diff-refine-hunk t)
@@ -117,6 +112,7 @@ This function should only modify configuration layer settings."
      html
 
      ivy
+     ;; TODO Find alternative to helm-follow-persistent-mode
 
      javascript
      json
@@ -142,16 +138,16 @@ This function should only modify configuration layer settings."
           lsp-sideline-show-diagnostics nil
 
           ;; popup documentation boxes
-          lsp-ui-doc-enable nil          ;; disable all doc popups
+          ;; lsp-ui-doc-enable nil          ;; disable all doc popups
           lsp-ui-doc-show-with-cursor nil   ;; doc popup for cursor
-          lsp-ui-doc-show-with-mouse nil   ;; doc popup for mouse
+          ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
           lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
 
           ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
 
           ;; reference count for functions (assume their maybe other lenses in future)
-          lsp-lens-enable t
+          lsp-lens-enable nil
 
           ;; Efficient use of space in treemacs-lsp display
           treemacs-space-between-root-nodes nil
@@ -170,6 +166,7 @@ This function should only modify configuration layer settings."
      ;; `g r' menu in Emacs normal state
      multiple-cursors
 
+     ;; Spacemacs Org mode
      (org :variables
           org-enable-github-support t
           org-enable-asciidoc-support t
@@ -191,8 +188,7 @@ This function should only modify configuration layer settings."
      python
      ipython-notebook
 
-     ;; Text-based file manager with preview
-     ;; SPC a r
+     ;; Text-based file manager with preview - SPC a t r r
      (ranger :variables
              ranger-show-preview t
              ranger-show-hidden t
@@ -269,12 +265,13 @@ This function should only modify configuration layer settings."
      ) ;; End of dotspacemacs-configuration-layers
 
 
-   ;; List of additional packages that will be installed without being
-   ;; wrapped in a layer. If you need some configuration for these
-   ;; packages, then consider creating a layer. You can also put the
-   ;; configuration in `dotspacemacs/user-config'.
-   ;; To use a local version of a package, use the `:location' property:
-   ;; '(your-package :location "~/path/to/your-package/")
+   ;; List of additional packages that will be installed without being wrapped
+   ;; in a layer (generally the packages are installed only and should still be
+   ;; loaded using load/require/use-package in the user-config section below in
+   ;; this file). If you need some configuration for these packages, then
+   ;; consider creating a layer. You can also put the configuration in
+   ;; `dotspacemacs/user-config'. To use a local version of a package, use the
+   ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '()
 
@@ -317,7 +314,7 @@ It should only modify the values of Spacemacs settings."
    ;; To load it when starting Emacs add the parameter `--dump-file'
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
    ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
-   ;; (default spacemacs-27.1.pdmp)
+   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
    dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
 
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
@@ -347,7 +344,9 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
-   ;; latest version of packages from MELPA. (default nil)
+   ;; latest version of packages from MELPA. Spacelpa is currently in
+   ;; experimental state please use only for testing purposes.
+   ;; (default nil)
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
@@ -358,7 +357,7 @@ It should only modify the values of Spacemacs settings."
    ;; when the current branch is not `develop'. Note that checking for
    ;; new versions works via git commands, thus it calls GitHub services
    ;; whenever you start Emacs. (default nil)
-   dotspacemacs-check-for-update t
+   dotspacemacs-check-for-update nil
 
    ;; If non-nil, a form that evaluates to a package directory. For example, to
    ;; use different package directories for different Emacs versions, set this
@@ -392,10 +391,13 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `recents-by-project' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 9)
-                                (todos . 9)
-                                (projects . 7)
-                                (bookmarks . 24))
+   ;; The exceptional case is `recents-by-project', where list-type must be a
+   ;; pair of numbers, e.g. `(recents-by-project . (7 .  5))', where the first
+   ;; number is the project limit and the second the limit on the recent files
+   ;; within a project.
+   dotspacemacs-startup-lists '((projects . 3)
+                                (todos . 5)
+                                (bookmarks . 20))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -410,15 +412,15 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, *scratch* buffer will be persistent. Things you write down in
    ;; *scratch* buffer will be saved and restored automatically.
-   dotspacemacs-scratch-buffer-persistent nil
+   dotspacemacs-scratch-buffer-persistent t
 
    ;; If non-nil, `kill-buffer' on *scratch* buffer
    ;; will bury it instead of killing.
-   dotspacemacs-scratch-buffer-unkillable nil
+   dotspacemacs-scratch-buffer-unkillable t
 
    ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
    ;; (default nil)
-   dotspacemacs-initial-scratch-message "Scratch Buffer in Org-mode"
+   dotspacemacs-initial-scratch-message nil
 
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
@@ -434,13 +436,15 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(vim-powerline)
+   dotspacemacs-mode-line-theme '(doom)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts.
+   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; a non-negative integer (pixel size), or a floating-point (point size).
+   ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("FiraCode Nerd Font"
                                :size 12.0
                                :weight normal
@@ -487,7 +491,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then the last auto saved layouts are resumed automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-layouts t
 
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
    ;; effect when using the "jump to layout by number" commands. (default nil)
@@ -532,7 +536,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
@@ -603,13 +607,18 @@ It should only modify the values of Spacemacs settings."
                                          :size-limit-kb 1000)
 
 
-   ;; Code folding method. Possible values are `evil' and `origami'.
+   ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
-   dotspacemacs-folding-method 'evil
+   dotspacemacs-folding-method 'vimish
 
-   ;; If non-nil `smartparens-strict-mode' will be enabled in programming modes.
+   ;; If non-nil and `dotspacemacs-activate-smartparens-mode' is also non-nil,
+   ;; `smartparens-strict-mode' will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode t
+
+   ;; If non-nil smartparens-mode will be enabled in programming modes.
+   ;; (default t)
+   dotspacemacs-activate-smartparens-mode t
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc...
@@ -664,12 +673,15 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
+   ;; Show trailing whitespace (default t)
+   dotspacemacs-show-trailing-whitespace nil
+
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup 'nil
+   dotspacemacs-whitespace-cleanup 'all
 
    ;; If non nil activate `clean-aindent-mode' which tries to correct
    ;; virtual indentation of simple modes. This can interfer with mode specific
@@ -696,7 +708,10 @@ It should only modify the values of Spacemacs settings."
 
    ;; If nil the home buffer shows the full path of agenda items
    ;; and todos. If non nil only the file name is shown.
-   dotspacemacs-home-shorten-agenda-source nil))
+   dotspacemacs-home-shorten-agenda-source nil
+
+   ;; If non-nil then byte-compile some of Spacemacs files.
+   dotspacemacs-byte-compile nil))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -713,17 +728,26 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
-  ;; custom theme modification
-  ;; - overriding default height of modeline
-  (setq-default
-    theming-modifications
-      '((doom-solarized-dark
-         (mode-line :height 0.92)
-         (mode-line-inactive :height 0.92))))
-
   ;; Fixes missing dependency on GNU ls for insert-directory-program
+  ;; Use `brew --prefix' to find location of gnu coreutils on MacOS.
   (setq insert-directory-program
         (substitute-in-file-name "$HOME/homebrew/opt/coreutils/libexec/gnubin/ls"))
+
+  ;; custom theme modification
+  ;; spacemacs - overriding default height of modeline
+  ;; doom-gruvbox - subtle lsp symbol highlight
+  (setq-default
+    theming-modifications
+      '((spacemacs-light
+          (mode-line :height 0.92)
+          (mode-line-inactive :height 0.92))
+        (doom-solarized-light
+         (mode-line :height 0.92)
+         (mode-line-inactive :height 0.92))
+        (doom-gruvbox-light
+         (lsp-face-highlight-read :background nil :weight bold)
+         (command-log-command :foreground "firebrick")
+         (command-log-key :foreground "dark magenta"))))
 
   )  ;; End of dotspacemacs/user-int
 
@@ -731,8 +755,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump."
-  )
+dump.")
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -742,14 +766,27 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Environment Variables
+  ;; (setenv "PATH" "$PATH:/usr/local/texlive/2021/bin/universal-darwin/:PATH")
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; GC Messages
   (setq garbage-collection-messages t)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Remove initial input (regex ^) for ivy
+  (setq ivy-initial-inputs-alist nil)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Disable truncate lines globally
   (setq truncate-lines nil)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keeping Helm history clean
@@ -767,19 +804,19 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keycast - show Emacs commands in mode line
   (use-package keycast
-    :commands keycast-mode
-    :config
-    (define-minor-mode keycast-mode
-      "Show current command and its key binding in the mode line."
-      :global t
-      (if keycast-mode
-          (progn
-            (add-hook 'pre-command-hook 'keycast-mode-line-update t)
-            (add-to-list 'mode-line-misc-info '("" mode-line-keycast "    "))
-            )
-        (remove-hook 'pre-command-hook 'keycast-mode-line-update)
-        (setq global-mode-string (remove '("" mode-line-keycast " ") mode-line-misc-info))))
-    )
+                :commands keycast-mode
+                :config
+                (define-minor-mode keycast-mode
+                  "Show current command and its key binding in the mode line."
+                  :global t
+                  (if keycast-mode
+                      (progn
+                        (add-hook 'pre-command-hook 'keycast-mode-line-update t)
+                        (add-to-list 'mode-line-misc-info '("" mode-line-keycast "    "))
+                        )
+                    (remove-hook 'pre-command-hook 'keycast-mode-line-update)
+                    (setq global-mode-string (remove '("" mode-line-keycast " ") mode-line-misc-info))))
+                )
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -819,8 +856,8 @@ before packages are loaded."
   ;;
   (with-eval-after-load 'doom-modeline
     (doom-modeline-def-modeline 'practicalli-modeline
-                                '(workspace-name window-number modals persp-name buffer-info matches remote-host vcs)
-                                '(misc-info repl lsp))
+      '(workspace-name window-number modals persp-name buffer-info matches remote-host vcs)
+      '(misc-info repl lsp))
     (practicalli/setup-custom-doom-modeline))
 
   ;; checker = flycheck results (not working)
@@ -833,6 +870,7 @@ before packages are loaded."
   ;; debug
   ;; misc-info  - used for keycast
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; User key bindings
@@ -907,7 +945,6 @@ before packages are loaded."
   ;; End of Magit - forge configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Safe structural editing
   ;; for all major modes
@@ -930,7 +967,7 @@ before packages are loaded."
   ;;
   ;; Use Spacemacs as the $EDITOR (or $GIT_EDITOR) for git commits messages
   ;; when using git commit on the command line
-  ;; (require 'git-commit)
+  ;; (global-git-commit-mode t)
   ;;
   ;; Set locations of all your Git repositories
   ;; with a number to define how many sub-directories to search
@@ -1023,7 +1060,7 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Clojure configurations
   ;;
   ;; Do not indent single ; comment characters
@@ -1093,6 +1130,7 @@ before packages are loaded."
   ;;
   ;; End of Web-mode configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Eshell visual enhancements
@@ -1192,6 +1230,7 @@ before packages are loaded."
   ;; End of Eshell
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell configuration
   ;;
@@ -1200,6 +1239,7 @@ before packages are loaded."
   ;;
   ;; End of Shell configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; MacOSX
@@ -1359,6 +1399,7 @@ before packages are loaded."
   ;;
   ;; end of old-school bindings
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   )   ;; End of dot-spacemacs/user-config
 
