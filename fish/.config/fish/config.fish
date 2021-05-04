@@ -101,7 +101,6 @@ alias python='python3'
 
 # Colorize commands when possible.
 alias grep='grep --color=auto'
-alias diff='diff --color=auto'
 alias ccat='highlight --out-format=ansi'
 
 # These common commands are just too long! Abbreviate them.
