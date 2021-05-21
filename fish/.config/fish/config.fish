@@ -21,6 +21,7 @@ set -gx PATH "$HOME/emacs/default/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/openjdk@11/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
+set -gx PATH "/Library/Java/JavaVirtualMachines/graalvm-ce-java11-21.1.0/Contents/Home/bin" $PATH
 
 set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
@@ -36,6 +37,7 @@ set -gx PATH "$HOME/.local/bin" $PATH
 set -gx HOMEBREW_NO_ANALYTICS 1 $HOMEBREW_NO_ANALYTICS
 set -gx HOMEBREW_NO_INSECURE_REDIRECT 1 $HOMEBREW_NO_INSECURE_REDIRECT
 set -gx HOMEBREW_CASK_OPTS "--appdir=~/Applications" $HOMEBREW_CASK_OPTS
+set -gx HOMEBREW_CASK_OPTS "--build-from-source" $HOMEBREW_CASK_OPTS
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 set -gx PATH "$HOME/.rvm/bin" $PATH

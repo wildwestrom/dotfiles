@@ -59,6 +59,7 @@ This function should only modify configuration layer settings."
      (clojure :variables
               ;; clojure-backend 'cider               ;; use cider and disable lsp
               ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
+              clojure-enable-clj-refactor t
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
               clojure-indent-style 'align-arguments
@@ -90,7 +91,8 @@ This function should only modify configuration layer settings."
      ;; show word-granularity differences in current diff hunk
      (git :variables
           git-magit-status-fullscreen t
-          magit-diff-refine-hunk t)
+          magit-diff-refine-hunk t
+          git-enable-magit-todos-plugin t)
 
      ;; SPC g h to use GitHub repositories
      ;; SPC g g to use GitHub Gists
@@ -101,19 +103,13 @@ This function should only modify configuration layer settings."
      ;; https://develop.spacemacs.org/layers/+lang/graphviz/README.html
      graphviz
 
-     ;; GNU Global is a source code tagging system
-     ;; It queries symbol locations in source code, such as definitions or references
-     ;; `sudo apt install ctags` for Clojure support
-     ;; https://develop.spacemacs.org/layers/+tags/gtags/README.html
-     ;; (gtags :variables
-     ;;        gtags-enable-by-default t)
+     ;; helm-follow-mode sticky - remembers use of C-c C-f
+     ;; - follow mode previews when scrolling through a helm list
+     (helm :variables
+           helm-follow-mode-persistent t)
 
      haskell
      html
-
-     ivy
-     ;; TODO Find alternative to helm-follow-persistent-mode
-
      javascript
      json
 
@@ -124,18 +120,18 @@ This function should only modify configuration layer settings."
      ;; https://practicalli.github.io/spacemacs/install-spacemacs/clojure-lsp/lsp-variables-reference.html
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
-          lsp-enable-on-type-formatting nil
+          lsp-enable-on-type-formatting t
           ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation nil
+          lsp-enable-indentation t
+          lsp-enable-snippet t  ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
           lsp-enable-symbol-highlighting t
 
-          ;; Show lint error indicator in the mode-bar (tested on doom-modeline)
+          ;; Show lint error indicator in the mode line
           lsp-modeline-diagnostics-enable t
-          ;; disable doc popup for cursor
-          lsp-sideline-show-diagnostics nil
+          ;; lsp-modeline-diagnostics-scope :workspace
 
           ;; popup documentation boxes
           ;; lsp-ui-doc-enable nil          ;; disable all doc popups
@@ -145,6 +141,10 @@ This function should only modify configuration layer settings."
 
           ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
+          lsp-ui-sideline-show-code-actions nil
+          ;; lsp-ui-sideline-delay 500
+
+          ;; lsp-ui-sideline-show-diagnostics nil
 
           ;; reference count for functions (assume their maybe other lenses in future)
           lsp-lens-enable nil
@@ -340,7 +340,7 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1024 1024 4) ;; 4 MB
+   dotspacemacs-read-process-output-max (* 1024 1024 8)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -401,6 +401,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
+
+   ;; Show numbers before the startup list lines. (default t)
+   dotspacemacs-show-startup-list-numbers t
+
+   ;; The minimum delay in seconds between number key presses. (default 0.4)
+   dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -582,6 +588,10 @@ It should only modify the values of Spacemacs settings."
    ;; when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling t
 
+   ;; Show the scroll bar while scrolling. The auto hide time can be configured
+   ;; by setting this variable to a number. (default t)
+   dotspacemacs-scroll-bar-while-scrolling nil
+
    ;; Control line numbers activation.
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
@@ -666,15 +676,18 @@ It should only modify the values of Spacemacs settings."
    ;; %n - Narrow if appropriate
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
+   ;; If nil then Spacemacs uses default `frame-title-format' to avoid
+   ;; performance issues, instead of calculating the frame title by
+   ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%I@%S: %a"
+   dotspacemacs-frame-title-format nil
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
    ;; Show trailing whitespace (default t)
-   dotspacemacs-show-trailing-whitespace nil
+   dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
@@ -728,6 +741,16 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
+  ;; Detect System Appearace Change
+  (defun my/apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (load-theme 'doom-one-light t))
+      ('dark (load-theme 'doom-one t))))
+
+  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
+
   ;; Fixes missing dependency on GNU ls for insert-directory-program
   ;; Use `brew --prefix' to find location of gnu coreutils on MacOS.
   (setq insert-directory-program
@@ -776,23 +799,19 @@ before packages are loaded."
   (setq garbage-collection-messages t)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Remove initial input (regex ^) for ivy
-  (setq ivy-initial-inputs-alist nil)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;; LSP  hacking
+  (setq lsp-ui-sideline-enable nil)
+  ;; (setq lsp-ui-sideline-show-code-actions nil)
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Disable truncate lines globally
-  (setq truncate-lines nil)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+  (setq lsp-modeline-diagnostics-scope :workspace)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keeping Helm history clean
-  ;; (setq history-delete-duplicates t)
-  ;; (setq extended-command-history
-  ;;       (delq nil (delete-dups extended-command-history)))
+  (setq history-delete-duplicates t)
+  (setq extended-command-history
+        (delq nil (delete-dups extended-command-history)))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -909,8 +928,8 @@ before packages are loaded."
   ;; native line numbers taking up lots of space?
   (setq-default display-line-numbers-width nil)
   ;;
-  ;; replace / search with ivy-swiper in Evil normal state
-  (evil-global-set-key 'normal "/" 'swiper)
+  ;; replace / search with helm-swoop in Evil normal state
+  (evil-global-set-key 'normal "/" 'helm-swoop)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1047,11 +1066,8 @@ before packages are loaded."
   ;; Markdown mode hook for orgtbl-mode minor mode
   ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
   ;;
-  ;; Turn on visual-line-navigation for org-mode
-  ;; (add-hook 'org-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
-  ;;
-  ;; Turn on visual-line-numbers for org-mode
-  ;; (add-hook 'org-mode-hook 'spacemacs/toggle-visual-line-numbers-on)
+  ;; Turn on visual-line-mode for Org-mode only
+  ;; (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
   ;;
   ;; use org-re-reveal instead of org-reveal (which hasnt been updated in ages and breaks org-mode 9.2)
   ;; (use-package org-re-reveal :after org)
@@ -1068,7 +1084,7 @@ before packages are loaded."
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  ;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   ;; Lookup functions in Clojure - The Essentail Reference book
   ;; https://github.com/p3r7/clojure-essential-ref
@@ -1418,7 +1434,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(dap-mode bui yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements password-generator paradox ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-brain open-junk-file npm-mode nose nodejs-repl nameless multi-term multi-line mmm-mode minitest markdown-toc magit-section macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint ligature keycast json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide importmagic impatient-mode hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag haskell-snippets grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort diminish diff-hl devdocs define-word dante cython-mode csv-mode company-web company-statistics company-shell company-reftex company-quickhelp company-plsense company-math company-emoji company-cabal company-auctex company-anaconda command-log-mode column-enforce-mode color-identifiers-mode cmm-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell)))
+   '(tern dap-mode bui yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements password-generator paradox ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-brain open-junk-file npm-mode nose nodejs-repl nameless multi-term multi-line mmm-mode minitest markdown-toc magit-section macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint ligature keycast json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide importmagic impatient-mode hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag haskell-snippets grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort diminish diff-hl devdocs define-word dante cython-mode csv-mode company-web company-statistics company-shell company-reftex company-quickhelp company-plsense company-math company-emoji company-cabal company-auctex company-anaconda command-log-mode column-enforce-mode color-identifiers-mode cmm-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
