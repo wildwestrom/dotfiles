@@ -17,7 +17,6 @@ set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 set -gx PATH "/opt/local/bin:/opt/local/sbin" $PATH
 set -gx MANPATH "/usr/local/man" $MANPATH
 
-set -gx PATH "$HOME/emacs/default/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/openjdk@11/bin" $PATH
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
