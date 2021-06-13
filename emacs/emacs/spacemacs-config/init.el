@@ -105,11 +105,14 @@ This function should only modify configuration layer settings."
 
      ;; helm-follow-mode sticky - remembers use of C-c C-f
      ;; - follow mode previews when scrolling through a helm list
-     (helm :variables
-           helm-follow-mode-persistent t)
+     ;; (helm :variables
+     ;;       helm-follow-mode-persistent t)
 
      haskell
      html
+
+     ivy
+
      javascript
      json
 
@@ -342,7 +345,7 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1024 1024 8)
+   dotspacemacs-read-process-output-max (* 1024 1024 16)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -939,9 +942,12 @@ before packages are loaded."
   (setq-default display-line-numbers-width nil)
   ;;
   ;; replace / search with helm-swoop in Evil normal state
-  (evil-global-set-key 'normal "/" 'helm-swoop)
+  ;; (evil-global-set-key 'normal "/" 'helm-swoop)
   ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; replace / search with ivy-swiper in Evil normal state
+  (evil-global-set-key 'normal "/" 'swiper)
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

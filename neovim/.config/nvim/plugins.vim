@@ -46,8 +46,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'liuchengxu/vim-which-key'
 
 " snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'                               " actual snippets
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'                               " actual snippets
 
 " Auto pairs for '(' '[' '{'
 Plug 'machakann/vim-sandwich'

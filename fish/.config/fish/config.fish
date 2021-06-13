@@ -97,8 +97,6 @@ alias mkd='mkdir -pv'
 alias yt='youtube-dl --add-metadata -i'
 alias yta='yt -x -f bestaudio/best'
 alias ffmpeg='ffmpeg -hide_banner'
-alias pip='pip3'
-alias python='python3'
 
 # Colorize commands when possible.
 alias grep='grep --color=auto'
@@ -135,8 +133,8 @@ alias dotfiles='lazygit -w $HOME/.dotfiles/'
 # Alacritty
 alias termrc='$EDITOR $XDG_CONFIG_HOME/alacritty/alacritty.yml'
 
-set ALACRITTY_DARKTHEME 'solarized-dark.yml'
-set ALACRITTY_LIGHTTHEME 'ayu-light.yml'
+set ALACRITTY_DARKTHEME 'one-dark.yml'
+set ALACRITTY_LIGHTTHEME 'one-light.yml'
 alias termcolor-light='alacritty-colorscheme apply $ALACRITTY_LIGHTTHEME'
 alias termcolor-dark='alacritty-colorscheme apply $ALACRITTY_DARKTHEME'
 alias termcolor-toggle='alacritty-colorscheme toggle $ALACRITTY_LIGHTTHEME $ALACRITTY_DARKTHEME'

@@ -63,6 +63,6 @@ cnoremap 3636 <c-u>undo<CR>
 let g:iced_enable_default_key_mappings = v:true
 
 " use fs to save
-noremap <leader>fs :w<CR>
+"nnoremap <leader>fs :w<CR>
 
 "}}} 
