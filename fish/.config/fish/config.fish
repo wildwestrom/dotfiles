@@ -11,16 +11,17 @@ set -gx XDG_CACHE_HOME "$HOME/.cache"
 
 set -gx PATH "$HOME/homebrew/bin"  $PATH
 set -gx PATH "$HOME/homebrew/sbin" $PATH
+set -gx PATH "$HOME/homebrew/sbin" $PATH
 
 set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 
 set -gx PATH "/opt/local/bin:/opt/local/sbin" $PATH
 set -gx MANPATH "/usr/local/man" $MANPATH
 
-set -gx PATH "$HOME/homebrew/opt/openjdk@11/bin" $PATH
+set -gx PATH "$HOME/homebrew/opt/openjdk@16/bin" $PATH
+set -gx JAVA_HOME "$HOME/homebrew/opt/openjdk@16" $JAVA_HOME
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
-set -gx PATH "/Library/Java/JavaVirtualMachines/graalvm-ce-java11-21.1.0/Contents/Home/bin" $PATH
 
 set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
@@ -59,7 +60,8 @@ set -gx PATH "$HOME/emacs/doom-emacs/bin" $PATH
 set -gx NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
 set -gx PATH "$NPM_CONFIG_PREFIX/bin" $PATH
 
-# Python Paths
+# Ruby gem path
+set -gx PATH "$HOME/homebrew/lib/ruby/gems/3.0.0/bin/" $PATH
 
 # Default programs:
 set -gx EDITOR "nvim"
