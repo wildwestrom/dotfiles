@@ -74,8 +74,8 @@ This function should only modify configuration layer settings."
      ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
      colors
 
-     ;; SPC a L displays key and command history in a separate buffer
-     command-log
+     ;; ;; SPC a L displays key and command history in a separate buffer
+     ;; command-log
 
      ;; Tools to work with comma separate values e.g. data science data
      ;; https://develop.spacemacs.org/layers/+lang/csv/README.html
@@ -125,7 +125,7 @@ This function should only modify configuration layer settings."
           ;; Formatting and indentation - use Cider instead
           lsp-enable-on-type-formatting nil
           ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation t
+          lsp-enable-indentation nil
           lsp-enable-snippet t  ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
@@ -138,8 +138,8 @@ This function should only modify configuration layer settings."
 
           ;; popup documentation boxes
           ;; lsp-ui-doc-enable nil          ;; disable all doc popups
-          lsp-ui-doc-show-with-cursor nil   ;; doc popup for cursor
-          ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
+          lsp-ui-doc-show-with-cursor t     ;; doc popup for cursor
+          lsp-ui-doc-show-with-mouse nil    ;; doc popup for mouse
           lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
 
           ;; code actions and diagnostics text as right-hand side of buffer
@@ -187,10 +187,6 @@ This function should only modify configuration layer settings."
 
      ;; TODO Figure out how org-roam works.
 
-     perl5
-     python
-     ipython-notebook
-
      ;; Text-based file manager with preview - SPC a t r r
      (ranger :variables
              ranger-show-preview t
@@ -198,9 +194,6 @@ This function should only modify configuration layer settings."
              ranger-cleanup-eagerly t
              ranger-cleanup-on-disable t
              ranger-ignored-extensions '("mkv" "flv" "iso" "mp4"))
-
-     ruby
-     rust
 
      shell-scripts
      ;; SPC ' runs eshell in a popup buffer
@@ -254,6 +247,7 @@ This function should only modify configuration layer settings."
      ;; 'prog-mode for only programming languages
      ;; including text-mode may cause issues with org-mode and magit
      (unicode-fonts :variables
+                    unicode-fonts-existence-checks all
                     unicode-fonts-enable-ligatures nil
                     unicode-fonts-ligature-modes '(prog-mode))
 
@@ -456,10 +450,14 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   dotspacemacs-default-font '("FiraCode Nerd Font"
-                               :size 12.0
-                               :weight normal
-                               :width normal)
+   dotspacemacs-default-font '(("FiraCode Nerd Font"
+                                :size 12.0
+                                :weight normal
+                                :width normal)
+                               ("HackGen35Nerd Console"
+                                :size 12.0
+                                :weight normal
+                                :width normal))
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -800,8 +798,9 @@ before packages are loaded."
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Environment Variables
-  ;; (setenv "PATH" "$PATH:/usr/local/texlive/2021/bin/universal-darwin/:PATH")
+  ;; Remvoe annoying caret (^)
+  ;; when doing M-x with ivy
+  (setq ivy-initial-inputs-alist nil)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -1443,20 +1442,4 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
- '(package-selected-packages
-   '(tern dap-mode bui yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements password-generator paradox ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-brain open-junk-file npm-mode nose nodejs-repl nameless multi-term multi-line mmm-mode minitest markdown-toc magit-section macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint ligature keycast json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide importmagic impatient-mode hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag haskell-snippets grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort diminish diff-hl devdocs define-word dante cython-mode csv-mode company-web company-statistics company-shell company-reftex company-quickhelp company-plsense company-math company-emoji company-cabal company-auctex company-anaconda command-log-mode column-enforce-mode color-identifiers-mode cmm-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
- '(reb-re-syntax 'string))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mode-line ((t (:height 0.92))))
- '(mode-line-inactive ((t (:height 0.92)))))
 )
