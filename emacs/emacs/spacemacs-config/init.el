@@ -39,21 +39,104 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;;
-     ;; Layers added in alphabetic order
 
-     ;; Enable asciidoc layer for editing asciidoc content e.g. docs.cider.mx editing
-     asciidoc
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;;
+     ;; General Nicities
+     ;;
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; Add tool tips to show doc string of functions
-     ;; Show snippets in the auto-completion popup
-     ;; Show suggestions by most commonly used
-     (auto-completion :variables
-                      auto-completion-enable-help-tooltip t
-                      auto-completion-enable-snippets-in-popup t
-                      auto-completion-enable-sort-by-usage t)
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Cosmetics
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; To have auto-completion on as soon as you start typing
-     ;; (auto-completion :variables auto-completion-idle-delay nil)
+     ;; Nyan cat indicating relative position in current buffer
+     ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
+     colors
+
+     ;; Include emojis into everything
+     emoji
+
+     ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
+     (spacemacs-modeline :variables
+                         doom-modeline-height 12
+                         doom-modeline-major-mode-color-icon t
+                         doom-modeline-buffer-file-name-style 'relative-to-project
+                         doom-modeline-display-default-persp-name t
+                         doom-modeline-minor-modes nil
+                         doom-modeline-modal-icon nil)
+
+     ;; Customise the Spacemacs themes
+     ;; https://develop.spacemacs.org/layers/+themes/theming/README.html
+     ;; Code in dotspacemacs/user-init to reduce size of modeline
+     theming
+
+     ;; Support font ligatures (fancy symbols) in all modes
+     ;; 'prog-mode for only programming languages
+     ;; including text-mode may cause issues with org-mode and magit
+     (unicode-fonts :variables
+                    unicode-fonts-existence-checks all
+                    unicode-fonts-enable-ligatures nil
+                    unicode-fonts-ligature-modes '(prog-mode))
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Tools
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+     ;; Spell as you type with Flyspell package,
+     ;; requires external command - ispell, hunspell, aspell
+     ;; SPC S menu, SPC S s to check current word
+     ;; spell-checking
+
+     ;; Editing multiple lines of text concurrently
+     ;; `g r' menu in Emacs normal state
+     multiple-cursors
+
+     (ivy :variables
+          ivy-initial-inputs-alist nil  ;; removes annoying caret (^) on M-x
+          )
+
+     ;; Text-based file manager with preview - SPC a t r r
+     (ranger :variables
+             ranger-show-preview t
+             ranger-show-hidden t
+             ranger-cleanup-eagerly t
+             ranger-cleanup-on-disable t
+             ranger-ignored-extensions '("mkv" "flv" "iso" "mp4"))
+
+     ;; Visual file manager - `SPC p t'
+     ;; treemacs-no-png-images t removes file and directory icons
+     (treemacs :variables
+               treemacs-indentation 1
+               treemacs-use-filewatch-mode t
+               treemacs-use-follow-mode t)
+
+     ;; spacemacs-layouts layer added to set variables
+     ;; SPC TAB restricted to current layout buffers
+     ;; Kill buffers when killing layer - SPC l x
+     (spacemacs-layouts :variables
+                        spacemacs-layouts-restrict-spc-tab t
+                        persp-autokill-buffer-on-remove 'kill-weak)
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Logging
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+     ;; ;; SPC a L displays key and command history in a separate buffer
+     command-log
+
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;;
+     ;; Programming Languages
+     ;;
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+     ;; For Spacemacs configuration files and packages
+     emacs-lisp
+
+
+     shell-scripts
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
@@ -70,22 +153,59 @@ This function should only modify configuration layer settings."
               cider-repl-buffer-size-limit 100        ;; limit lines shown in REPL buffer
               )
 
-     ;; Nyan cat indicating relative position in current buffer
-     ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
-     colors
+     haskell
 
-     ;; ;; SPC a L displays key and command history in a separate buffer
-     ;; command-log
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Web Programming
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; Tools to work with comma separate values e.g. data science data
-     ;; https://develop.spacemacs.org/layers/+lang/csv/README.html
+     html
+     javascript
+     typescript
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Document/Data Formats
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+     asciidoc
+
      csv
 
-     ;; For Spacemacs configuration files and packages
-     emacs-lisp
+     json
 
-     ;; Include emojis into everything
-     emoji
+     (latex :variables latex-refresh-preview t)
+
+     (markdown :variables
+               markdown-live-preview-engine 'vmd)
+
+     ;; Spacemacs Org mode
+     (org :variables
+          org-enable-github-support t
+          org-enable-asciidoc-support t
+          org-enable-bootstrap-support t
+          org-enable-reveal-js-support t
+          org-want-todo-bindings t
+          org-enable-org-journal-support t
+          org-journal-dir "~/Documents/org/Notes/Journal"
+          org-journal-file-format "%Y-%m-%d"
+          org-journal-date-prefix "#+TITLE: "
+          org-journal-date-format "%A, %B %d %Y"
+          org-journal-time-prefix "* "
+          org-journal-time-format ""
+          org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\"")
+     ;; TODO Figure out how org-roam works.
+
+     yaml
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;;
+     ;; Programming Tools
+     ;;
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Version Control
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      ;; SPC g s opens Magit git client full screen (q restores previous layout)
      ;; show word-granularity differences in current diff hunk
@@ -98,28 +218,31 @@ This function should only modify configuration layer settings."
      ;; SPC g g to use GitHub Gists
      github
 
-     ;; graphviz - open-source graph declaration system
-     ;; Used to generated graphs of Clojure project dependencies
-     ;; https://develop.spacemacs.org/layers/+lang/graphviz/README.html
-     graphviz
+     ;; Highlight changes in buffers
+     ;; SPC g . transient state for navigating changes
+     (version-control :variables
+                      version-control-diff-tool 'diff-hl
+                      version-control-global-margin t)
 
-     ;; helm-follow-mode sticky - remembers use of C-c C-f
-     ;; - follow mode previews when scrolling through a helm list
-     ;; (helm :variables
-     ;;       helm-follow-mode-persistent t)
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Completion and other smartness
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     haskell
-     html
+     ;; To have auto-completion on as soon as you start typing
+     ;; (auto-completion :variables auto-completion-idle-delay nil)
 
-     ivy
+     ;; Add tool tips to show doc string of functions
+     ;; Show snippets in the auto-completion popup
+     ;; Show suggestions by most commonly used
+     (auto-completion :variables
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-sort-by-usage t)
 
-     javascript
-     json
+     ;; Use original flycheck fringe bitmaps
+     (syntax-checking :variables
+                      syntax-checking-use-original-bitmaps t)
 
-     (latex :variables latex-refresh-preview t)
-
-
-     ;; Language server protocol with minimal visual impact
      ;; https://practicalli.github.io/spacemacs/install-spacemacs/clojure-lsp/lsp-variables-reference.html
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
@@ -162,104 +285,27 @@ This function should only modify configuration layer settings."
 
           lsp-log-io nil)
 
-     (markdown :variables
-               markdown-live-preview-engine 'vmd)
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Visualizer
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; Editing multiple lines of text concurrently
-     ;; `g r' menu in Emacs normal state
-     multiple-cursors
+     ;; graphviz - open-source graph declaration system
+     ;; Used to generated graphs of Clojure project dependencies
+     ;; https://develop.spacemacs.org/layers/+lang/graphviz/README.html
+     graphviz
 
-     ;; Spacemacs Org mode
-     (org :variables
-          org-enable-github-support t
-          org-enable-asciidoc-support t
-          org-enable-bootstrap-support t
-          org-enable-reveal-js-support t
-          org-want-todo-bindings t
-          org-enable-org-journal-support t
-          org-journal-dir "~/Documents/org/Notes/Journal"
-          org-journal-file-format "%Y-%m-%d"
-          org-journal-date-prefix "#+TITLE: "
-          org-journal-date-format "%A, %B %d %Y"
-          org-journal-time-prefix "* "
-          org-journal-time-format ""
-          org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\"")
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; Shell
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; TODO Figure out how org-roam works.
-
-     ;; Text-based file manager with preview - SPC a t r r
-     (ranger :variables
-             ranger-show-preview t
-             ranger-show-hidden t
-             ranger-cleanup-eagerly t
-             ranger-cleanup-on-disable t
-             ranger-ignored-extensions '("mkv" "flv" "iso" "mp4"))
-
-     shell-scripts
-     ;; SPC ' runs eshell in a popup buffer
+     ;; SPC ' runs a shell in a popup buffer
      ;; To run your terminal shell, add
-     ;; shell-default-shell 'multi-term
+     ;; shell-default-shell 'vterm
      (shell :variables
             shell-default-shell 'eshell
             shell-default-height 30
             shell-default-position 'bottom)
 
-     ;; spacemacs-layouts layer added to set variables
-     ;; SPC TAB restricted to current layout buffers
-     ;; Kill buffers when killing layer - SPC l x
-     (spacemacs-layouts :variables
-                        spacemacs-layouts-restrict-spc-tab t
-                        persp-autokill-buffer-on-remove 'kill-weak)
-
-     ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
-     (spacemacs-modeline :variables
-                         doom-modeline-height 12
-                         doom-modeline-major-mode-color-icon t
-                         doom-modeline-buffer-file-name-style 'relative-to-project
-                         doom-modeline-display-default-persp-name t
-                         doom-modeline-minor-modes nil
-                         doom-modeline-modal-icon nil)
-
-     ;; Spell as you type with Flyspell package,
-     ;; requires external command - ispell, hunspell, aspell
-     ;; SPC S menu, SPC S s to check current word
-     ;; spell-checking
-
-     ;; Use original flycheck fringe bitmaps
-     (syntax-checking :variables
-                      syntax-checking-use-original-bitmaps t)
-
-     ;; Visual file manager - `SPC p t'
-     ;; treemacs-no-png-images t removes file and directory icons
-     (treemacs :variables
-               treemacs-indentation 1
-               treemacs-use-filewatch-mode t
-               treemacs-use-follow-mode t)
-
-     ;; Customise the Spacemacs themes
-     ;; https://develop.spacemacs.org/layers/+themes/theming/README.html
-     ;; Code in dotspacemacs/user-init to reduce size of modeline
-     theming
-
-     typescript
-
-     ;; Support font ligatures (fancy symbols) in all modes
-     ;; 'prog-mode for only programming languages
-     ;; including text-mode may cause issues with org-mode and magit
-     (unicode-fonts :variables
-                    unicode-fonts-existence-checks all
-                    unicode-fonts-enable-ligatures nil
-                    unicode-fonts-ligature-modes '(prog-mode))
-
-     ;; Highlight changes in buffers
-     ;; SPC g . transient state for navigating changes
-     (version-control :variables
-                      version-control-diff-tool 'diff-hl
-                      version-control-global-margin t)
-
-     vimscript
-
-     yaml
 
      ) ;; End of dotspacemacs-configuration-layers
 
