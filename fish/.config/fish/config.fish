@@ -15,7 +15,6 @@ set -gx PATH "$HOME/homebrew/sbin" $PATH
 
 set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 
-set -gx PATH "/opt/local/bin:/opt/local/sbin" $PATH
 set -gx MANPATH "/usr/local/man" $MANPATH
 
 set -gx PATH "$HOME/homebrew/opt/openjdk@16/bin" $PATH
@@ -26,7 +25,7 @@ set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
 set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 # Latex Variables
-set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
+# set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
 set -gx MANPATH "/usr/local/texlive/2021/texmf-dist/doc/man" $MANPATH
 set -gx INFOPATH "/usr/local/texlive/2021/texmf-dist/doc/info" $INFOPATH
 
@@ -65,7 +64,7 @@ set -gx PATH "$HOME/homebrew/lib/ruby/gems/3.0.0/bin/" $PATH
 
 # Default programs:
 set -gx EDITOR "nvim"
-set -gx VISUAL "nvim"
+set -gx VISUAL "emacsclient -c"
 set -gx READER "less"
 
 # ~/ Clean-up:
