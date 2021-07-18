@@ -4,4 +4,6 @@
                 (env . (("SPACEMACSDIR" . "~/emacs/spacemacs-config")))))
 
  ("doom" . ((user-emacs-directory . "~/emacs/doom-emacs")
-           (env . (("DOOMDIR" . "~/emacs/doom-emacs-config"))))))
+           (env . (("DOOMDIR" . "~/emacs/doom-emacs-config")))))
+
+ ("xah" . ((user-emacs-directory . "~/emacs/xah"))))
