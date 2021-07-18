@@ -47,7 +47,7 @@ This function should only modify configuration layer settings."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; Cosmetics
+     ;; Interface
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      ;; Nyan cat indicating relative position in current buffer
@@ -75,9 +75,12 @@ This function should only modify configuration layer settings."
      ;; 'prog-mode for only programming languages
      ;; including text-mode may cause issues with org-mode and magit
      (unicode-fonts :variables
-                    unicode-fonts-existence-checks all
+                    unicode-fonts-existence-checks 'all
                     unicode-fonts-enable-ligatures nil
                     unicode-fonts-ligature-modes '(prog-mode))
+
+     (keyboard-layout :variables
+                      kl-layout 'dvp)
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Tools
@@ -92,9 +95,9 @@ This function should only modify configuration layer settings."
      ;; `g r' menu in Emacs normal state
      multiple-cursors
 
+     ;; removes annoying caret (^) on M-x
      (ivy :variables
-          ivy-initial-inputs-alist nil  ;; removes annoying caret (^) on M-x
-          )
+          ivy-initial-inputs-alist nil)
 
      ;; Text-based file manager with preview - SPC a t r r
      (ranger :variables
@@ -106,10 +109,13 @@ This function should only modify configuration layer settings."
 
      ;; Visual file manager - `SPC p t'
      ;; treemacs-no-png-images t removes file and directory icons
-     (treemacs :variables
-               treemacs-indentation 1
-               treemacs-use-filewatch-mode t
-               treemacs-use-follow-mode t)
+     ;; (treemacs :variables
+     ;;           treemacs-indentation 1
+     ;;           treemacs-use-filewatch-mode t
+     ;;           treemacs-use-follow-mode t)
+     (neotree :variables
+              neo-theme 'icons
+              neo-vc-integration '(char))
 
      ;; spacemacs-layouts layer added to set variables
      ;; SPC TAB restricted to current layout buffers
@@ -162,6 +168,8 @@ This function should only modify configuration layer settings."
      html
      javascript
      typescript
+     elm
+     purescript
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Document/Data Formats
@@ -173,7 +181,8 @@ This function should only modify configuration layer settings."
 
      json
 
-     (latex :variables latex-refresh-preview t)
+     (latex :variables
+            latex-refresh-preview t)
 
      (markdown :variables
                markdown-live-preview-engine 'vmd)
@@ -192,7 +201,12 @@ This function should only modify configuration layer settings."
           org-journal-date-format "%A, %B %d %Y"
           org-journal-time-prefix "* "
           org-journal-time-format ""
-          org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\"")
+          org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\""
+          org-latex-classes '("letter" "\\documentclass{letter}"
+                              ("\\section{%s}" . "\\section*{%s}")
+                              ("\\subsection{%s}" . "\\subsection*{%s}")
+                              ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+          )
      ;; TODO Figure out how org-roam works.
 
      yaml
@@ -248,7 +262,7 @@ This function should only modify configuration layer settings."
           ;; Formatting and indentation - use Cider instead
           lsp-enable-on-type-formatting nil
           ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation nil
+          lsp-enable-indentation t
           lsp-enable-snippet t  ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
@@ -256,14 +270,14 @@ This function should only modify configuration layer settings."
           lsp-enable-symbol-highlighting t
 
           ;; Show lint error indicator in the mode line
-          lsp-modeline-diagnostics-enable t
+          ;; lsp-modeline-diagnostics-enable t
           ;; lsp-modeline-diagnostics-scope :workspace
 
           ;; popup documentation boxes
-          ;; lsp-ui-doc-enable nil          ;; disable all doc popups
+          ;; lsp-ui-doc-enable nil             ;; disable all doc popups
           lsp-ui-doc-show-with-cursor t     ;; doc popup for cursor
           lsp-ui-doc-show-with-mouse nil    ;; doc popup for mouse
-          lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
+          lsp-ui-doc-delay 1                ;; delay in seconds for popup to display
 
           ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
@@ -504,6 +518,15 @@ It should only modify the values of Spacemacs settings."
                                 :size 12.0
                                 :weight normal
                                 :width normal))
+   ;; Uncomment for recording mode
+   ;; dotspacemacs-default-font '(("FiraCode Nerd Font"
+   ;;                              :size 24.0
+   ;;                              :weight normal
+   ;;                              :width normal)
+   ;;                             ("HackGen35Nerd Console"
+   ;;                              :size 24.0
+   ;;                              :weight normal
+   ;;                              :width normal))
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -838,6 +861,14 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Org document preview github
+  (use-package maple-preview
+    :commands (maple-preview-mode)
+    :defer t)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Truncate lines by default
   (setq truncate-lines t)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -857,14 +888,6 @@ before packages are loaded."
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; LSP  hacking
-  (setq lsp-ui-sideline-enable nil)
-  ;; (setq lsp-ui-sideline-show-code-actions nil)
-
-  (setq lsp-modeline-diagnostics-scope :workspace)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keeping Helm history clean
   (setq history-delete-duplicates t)
   (setq extended-command-history
@@ -881,19 +904,19 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keycast - show Emacs commands in mode line
   (use-package keycast
-                :commands keycast-mode
-                :config
-                (define-minor-mode keycast-mode
-                  "Show current command and its key binding in the mode line."
-                  :global t
-                  (if keycast-mode
-                      (progn
-                        (add-hook 'pre-command-hook 'keycast-mode-line-update t)
-                        (add-to-list 'mode-line-misc-info '("" mode-line-keycast "    "))
-                        )
-                    (remove-hook 'pre-command-hook 'keycast-mode-line-update)
-                    (setq global-mode-string (remove '("" mode-line-keycast " ") mode-line-misc-info))))
-                )
+    :commands keycast-mode
+    :config
+    (define-minor-mode keycast-mode
+      "Show current command and its key binding in the mode line."
+      :global t
+      (if keycast-mode
+          (progn
+            (add-hook 'pre-command-hook 'keycast-mode-line-update t)
+            (add-to-list 'mode-line-misc-info '("" mode-line-keycast "    "))
+            )
+        (remove-hook 'pre-command-hook 'keycast-mode-line-update)
+        (setq global-mode-string (remove '("" mode-line-keycast " ") mode-line-misc-info))))
+    )
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1077,7 +1100,7 @@ before packages are loaded."
   ;; Define a kanban style set of stages for todo tasks
   (with-eval-after-load 'org
     (setq org-todo-keywords
-         '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED"))))
+          '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED"))))
   ;;
   ;; The default keywords all use the same colour.
   ;; Make the states easier to distinguish by using different colours
@@ -1123,6 +1146,22 @@ before packages are loaded."
      (push '("[X]" . "☑" ) prettify-symbols-alist)
      (push '("[-]" . "❍" ) prettify-symbols-alist)
      (prettify-symbols-mode)))
+
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 ;; '("koma-article"
+                 ;;   "\\documentclass{scrartcl}"
+                 ;;   ("\\section{%s}" . "\\section*{%s}")
+                 ;;   ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ;;   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ;;   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ;;   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                 '("letter"
+                   "\\documentclass{letter}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
   ;;
   ;; Markdown mode hook for orgtbl-mode minor mode
   ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
@@ -1226,8 +1265,8 @@ before packages are loaded."
     `(setq ,NAME
            (lambda () (when ,FORM
                         (-> ,ICON
-                            (concat esh-section-delim ,FORM)
-                            (with-face ,@PROPS))))))
+                          (concat esh-section-delim ,FORM)
+                          (with-face ,@PROPS))))))
   ;;
   (defun esh-acc (acc x)
     "Accumulator for evaluating and concatenating esh-sections."
@@ -1478,14 +1517,34 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  )   ;; End of dot-spacemacs/user-config
+  ;; End of dot-spacemacs/user-config
 
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
+  ;; Do not write anything past this comment. This is where Emacs will
+  ;; auto-generate custom variable definitions.
+  (defun dotspacemacs/emacs-custom-settings ()
+    "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+    ))
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
+ '(package-selected-packages
+   '(neotree yasnippet-snippets yaml-mode xterm-color ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unkillable-scratch unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org tide terminal-here tagedit symon symbol-overlay svelte-mode string-inflection string-edit spaceline-all-the-icons smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request ranger rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pug-mode psci psc-ide prettier-js popwin password-generator paradox ox-twbs ox-gfm ox-asciidoc overseer orgit-forge org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink org-brain open-junk-file npm-mode nodejs-repl nameless multi-term multi-line mmm-mode markdown-toc magit-todos magit-section macrostep lsp-ui lsp-treemacs lsp-origami lsp-latex lsp-ivy lsp-haskell lorem-ipsum livid-mode link-hint keycast json-navigator json-mode js2-refactor js-doc ivy-yasnippet ivy-xref ivy-purpose ivy-hydra ivy-avy insert-shebang indent-guide impatient-mode hybrid-mode hungry-delete hlint-refactor hindent highlight-parentheses highlight-numbers highlight-indentation helm-make haskell-snippets grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates gitignore-mode github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-elm flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-vimish-fold evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elm-test-runner elm-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline dired-quick-sort diminish diff-hl define-word dante csv-mode counsel-projectile counsel-css company-web company-statistics company-shell company-reftex company-quickhelp company-math company-emoji company-cabal company-auctex command-log-mode column-enforce-mode color-identifiers-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode browse-at-remote auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ac-ispell)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 )
