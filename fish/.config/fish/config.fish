@@ -25,7 +25,8 @@ set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
 set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 # Latex Variables
-# set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
+set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
+set -gx PATH "/Library/TeX/texbin/" $PATH
 set -gx MANPATH "/usr/local/texlive/2021/texmf-dist/doc/man" $MANPATH
 set -gx INFOPATH "/usr/local/texlive/2021/texmf-dist/doc/info" $INFOPATH
 
