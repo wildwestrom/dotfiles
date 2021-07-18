@@ -79,9 +79,6 @@ This function should only modify configuration layer settings."
                     unicode-fonts-enable-ligatures nil
                     unicode-fonts-ligature-modes '(prog-mode))
 
-     (keyboard-layout :variables
-                      kl-layout 'dvp)
-
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Tools
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -89,7 +86,7 @@ This function should only modify configuration layer settings."
      ;; Spell as you type with Flyspell package,
      ;; requires external command - ispell, hunspell, aspell
      ;; SPC S menu, SPC S s to check current word
-     ;; spell-checking
+     spell-checking
 
      ;; Editing multiple lines of text concurrently
      ;; `g r' menu in Emacs normal state
@@ -115,7 +112,7 @@ This function should only modify configuration layer settings."
      ;;           treemacs-use-follow-mode t)
      (neotree :variables
               neo-theme 'icons
-              neo-vc-integration '(char))
+              neo-vc-integration '(face))
 
      ;; spacemacs-layouts layer added to set variables
      ;; SPC TAB restricted to current layout buffers
@@ -682,11 +679,11 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   dotspacemacs-line-numbers '(:relative t
-                                         :disabled-for-modes dired-mode
-                                         doc-view-mode
-                                         pdf-view-mode
-                                         :size-limit-kb 1000)
+   dotspacemacs-line-numbers '(:visual t
+                               :disabled-for-modes dired-mode
+                                                   doc-view-mode
+                                                   pdf-view-mode
+                               :size-limit-kb 1000)
 
 
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
@@ -827,22 +824,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; Use `brew --prefix' to find location of gnu coreutils on MacOS.
   (setq insert-directory-program
         (substitute-in-file-name "$HOME/homebrew/opt/coreutils/libexec/gnubin/ls"))
-
-  ;; custom theme modification
-  ;; spacemacs - overriding default height of modeline
-  ;; doom-gruvbox - subtle lsp symbol highlight
-  (setq-default
-    theming-modifications
-      '((spacemacs-light
-          (mode-line :height 0.92)
-          (mode-line-inactive :height 0.92))
-        (doom-solarized-light
-         (mode-line :height 0.92)
-         (mode-line-inactive :height 0.92))
-        (doom-gruvbox-light
-         (lsp-face-highlight-read :background nil :weight bold)
-         (command-log-command :foreground "firebrick")
-         (command-log-key :foreground "dark magenta"))))
 
   )  ;; End of dotspacemacs/user-int
 
@@ -1086,8 +1067,11 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Org-mode configuration
   ;;
-  ;; I should write a toggle function to show descriptive or literate links in Org-mode
-  ;;(setq org-descriptive-links nil)
+  ;; Visual line navigation on by default in Org-mode buffers.
+  (add-hook
+   'org-mode-hook
+   (lambda ()
+     (spacemacs/toggle-visual-line-navigation-on)))
   ;;
   ;; Org-reveal - define were reveal.js files can be found
   ;; (I place reveal.js files in same directory as I write the org files)
@@ -1180,7 +1164,7 @@ before packages are loaded."
   ;; Clojure configurations
   ;;
   ;; Do not indent single ; comment characters
-  (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
+  ;; (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
