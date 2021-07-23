@@ -106,13 +106,13 @@ This function should only modify configuration layer settings."
 
      ;; Visual file manager - `SPC p t'
      ;; treemacs-no-png-images t removes file and directory icons
-     ;; (treemacs :variables
-     ;;           treemacs-indentation 1
-     ;;           treemacs-use-filewatch-mode t
-     ;;           treemacs-use-follow-mode t)
-     (neotree :variables
-              neo-theme 'icons
-              neo-vc-integration '(face))
+     (treemacs :variables
+               treemacs-indentation 1
+               treemacs-use-filewatch-mode t
+               treemacs-use-follow-mode t)
+     ;; (neotree :variables
+     ;;          neo-theme 'icons
+     ;;          neo-vc-integration '(face))
 
      ;; spacemacs-layouts layer added to set variables
      ;; SPC TAB restricted to current layout buffers
@@ -144,7 +144,7 @@ This function should only modify configuration layer settings."
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
               ;; clojure-backend 'cider               ;; use cider and disable lsp
-              ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
+              clojure-enable-linters 'nil             ;; clj-kondo included in lsp
               clojure-enable-clj-refactor t
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
@@ -179,6 +179,7 @@ This function should only modify configuration layer settings."
      json
 
      (latex :variables
+            latex-backend 'lsp
             latex-refresh-preview t)
 
      (markdown :variables
@@ -1017,10 +1018,7 @@ before packages are loaded."
   ;; GitHub user and organization accounts owned
   ;; used by @ c f  to create a fork
   (setq forge-owned-accounts
-        '(("practicalli" "jr0cket"
-           "ClojureBridgeLondon" "ldnclj"
-           "clojure-hacks"
-           "reclojure")))
+        '(("wildwestrom")))
   ;; To blacklist specific accounts,
   ;; over-riding forge-owned-accounts
   ;; (setq forge-owned-blacklist
@@ -1168,7 +1166,7 @@ before packages are loaded."
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  ;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   ;; Lookup functions in Clojure - The Essentail Reference book
   ;; https://github.com/p3r7/clojure-essential-ref
@@ -1523,8 +1521,13 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
- '(package-selected-packages
-   '(neotree yasnippet-snippets yaml-mode xterm-color ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unkillable-scratch unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org tide terminal-here tagedit symon symbol-overlay svelte-mode string-inflection string-edit spaceline-all-the-icons smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request ranger rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pug-mode psci psc-ide prettier-js popwin password-generator paradox ox-twbs ox-gfm ox-asciidoc overseer orgit-forge org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink org-brain open-junk-file npm-mode nodejs-repl nameless multi-term multi-line mmm-mode markdown-toc magit-todos magit-section macrostep lsp-ui lsp-treemacs lsp-origami lsp-latex lsp-ivy lsp-haskell lorem-ipsum livid-mode link-hint keycast json-navigator json-mode js2-refactor js-doc ivy-yasnippet ivy-xref ivy-purpose ivy-hydra ivy-avy insert-shebang indent-guide impatient-mode hybrid-mode hungry-delete hlint-refactor hindent highlight-parentheses highlight-numbers highlight-indentation helm-make haskell-snippets grip-mode graphviz-dot-mode google-translate golden-ratio gnuplot gitignore-templates gitignore-mode github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-elm flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-vimish-fold evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elm-test-runner elm-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline dired-quick-sort diminish diff-hl define-word dante csv-mode counsel-projectile counsel-css company-web company-statistics company-shell company-reftex company-quickhelp company-math company-emoji company-cabal company-auctex command-log-mode column-enforce-mode color-identifiers-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode browse-at-remote auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ac-ispell)))
+ '(safe-local-variable-values
+   '((cider-repl-display-help-banner)
+     (typescript-backend . tide)
+     (typescript-backend . lsp)
+     (javascript-backend . tide)
+     (javascript-backend . tern)
+     (javascript-backend . lsp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
