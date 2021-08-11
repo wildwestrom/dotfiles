@@ -9,20 +9,30 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 
+# Homebrew
 set -gx PATH "$HOME/homebrew/bin"  $PATH
 set -gx PATH "$HOME/homebrew/sbin" $PATH
 set -gx PATH "$HOME/homebrew/sbin" $PATH
 
+# C Include Path
+set -gx C_INCLUDE_PATH "/usr/local/include"
+set -gx C_INCLUDE_PATH "$HOME/homebrew/include" $C_INCLUDE_PATH
+
+# GNU Coreutils
 set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 
+# Man pages
+set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 set -gx MANPATH "/usr/local/man" $MANPATH
 
+# JDK
 set -gx PATH "$HOME/homebrew/opt/openjdk@16/bin" $PATH
 set -gx JAVA_HOME "$HOME/homebrew/opt/openjdk@16" $JAVA_HOME
+# LLVM
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
-set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
 
-set -g -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+# Nvim Plugins
+set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
 
 # Latex Variables
 set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
@@ -65,7 +75,7 @@ set -gx PATH "$HOME/homebrew/lib/ruby/gems/3.0.0/bin/" $PATH
 
 # Default programs:
 set -gx EDITOR "nvim"
-set -gx VISUAL "emacsclient -c"
+set -gx VISUAL "nvim"
 set -gx READER "less"
 
 # ~/ Clean-up:
