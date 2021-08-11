@@ -76,6 +76,7 @@ This function should only modify configuration layer settings."
      ;; including text-mode may cause issues with org-mode and magit
      (unicode-fonts :variables
                     unicode-fonts-existence-checks 'all
+                    unicode-fonts-force-multi-color-on-mac t
                     unicode-fonts-enable-ligatures nil
                     unicode-fonts-ligature-modes '(prog-mode))
 
@@ -135,20 +136,21 @@ This function should only modify configuration layer settings."
      ;;
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; For Spacemacs configuration files and packages
-     emacs-lisp
+     (c-c++ :variables c-c++-enable-clang-support t)
+     cmake
 
+     emacs-lisp
 
      shell-scripts
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
-              ;; clojure-backend 'cider               ;; use cider and disable lsp
-              clojure-enable-linters 'nil             ;; clj-kondo included in lsp
+              clojure-backend 'lsp
+              clojure-enable-linters nil              ;; clj-kondo included in lsp
               clojure-enable-clj-refactor t
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
-              clojure-indent-style 'align-arguments
+              clojure-indent-style 'always-align
               clojure-align-forms-automatically t
               clojure-toplevel-inside-comment-form t  ;; evaluate expressions in comment as top level
               cider-result-overlay-position 'at-point ;; results shown right after expression
@@ -157,6 +159,10 @@ This function should only modify configuration layer settings."
               )
 
      haskell
+
+     java
+
+     python
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Web Programming
@@ -187,10 +193,17 @@ This function should only modify configuration layer settings."
 
      ;; Spacemacs Org mode
      (org :variables
+          ;; TODO Figure out why sound doesn't work on MacOS
+          org-clock-sound "~/emacs/spacemacs-config/bell.wav"
           org-enable-github-support t
           org-enable-asciidoc-support t
           org-enable-bootstrap-support t
           org-enable-reveal-js-support t
+          org-enable-roam-support t
+          org-enable-roam-server t
+          org-enable-roam-protocol t
+          org-roam-directory "~/Documents/org/Notes/"
+          org-roam-v2-ack t
           org-want-todo-bindings t
           org-enable-org-journal-support t
           org-journal-dir "~/Documents/org/Notes/Journal"
@@ -268,8 +281,9 @@ This function should only modify configuration layer settings."
           lsp-enable-symbol-highlighting t
 
           ;; Show lint error indicator in the mode line
-          ;; lsp-modeline-diagnostics-enable t
-          ;; lsp-modeline-diagnostics-scope :workspace
+          lsp-modeline-diagnostics-enable nil
+          lsp-modeline-diagnostics-scope nil
+          lsp-modeline-code-actions-enable nil
 
           ;; popup documentation boxes
           ;; lsp-ui-doc-enable nil             ;; disable all doc popups
@@ -280,9 +294,7 @@ This function should only modify configuration layer settings."
           ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
           lsp-ui-sideline-show-code-actions nil
-          ;; lsp-ui-sideline-delay 500
-
-          ;; lsp-ui-sideline-show-diagnostics nil
+          lsp-ui-sideline-show-diagnostics nil
 
           ;; reference count for functions (assume their maybe other lenses in future)
           lsp-lens-enable nil
@@ -293,7 +305,7 @@ This function should only modify configuration layer settings."
           ;; Optimization for large files
           lsp-file-watch-threshold 10000
 
-          lsp-idle-delay 0.500
+          lsp-idle-delay 1.000
 
           lsp-log-io nil)
 
@@ -508,23 +520,16 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   dotspacemacs-default-font '(("FiraCode Nerd Font"
-                                :size 12.0
-                                :weight normal
-                                :width normal)
-                               ("HackGen35Nerd Console"
-                                :size 12.0
-                                :weight normal
-                                :width normal))
-   ;; Uncomment for recording mode
-   ;; dotspacemacs-default-font '(("FiraCode Nerd Font"
-   ;;                              :size 24.0
+   ;; ;; Comment for recording mode
+   ;; dotspacemacs-default-font '("FiraCode Nerd Font"
+   ;;                              :size 12.0
    ;;                              :weight normal
    ;;                              :width normal)
-   ;;                             ("HackGen35Nerd Console"
-   ;;                              :size 24.0
-   ;;                              :weight normal
-   ;;                              :width normal))
+   ;; Uncomment for recording mode
+   dotspacemacs-default-font '("FiraCode Nerd Font"
+                                :size 24.0
+                                :weight normal
+                                :width normal)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -821,6 +826,15 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
   (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
 
+  (setq-default
+   theming-modifications
+   '((doom-one
+      (mode-line :height 0.92)
+      (mode-line-inactive :height 0.92))
+     (doom-one-light
+      (mode-line :height 0.92)
+      (mode-line-inactive :height 0.92))))
+
   ;; Fixes missing dependency on GNU ls for insert-directory-program
   ;; Use `brew --prefix' to find location of gnu coreutils on MacOS.
   (setq insert-directory-program
@@ -841,6 +855,12 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Font for all Unicode chars
+  (when (member "HackGen35Nerd" (font-family-list))
+    (set-fontset-font t 'unicode "HackGen35Nerd Console" nil 'prepend))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Org document preview github
@@ -871,9 +891,9 @@ before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keeping Helm history clean
-  (setq history-delete-duplicates t)
-  (setq extended-command-history
-        (delq nil (delete-dups extended-command-history)))
+  ;; (setq history-delete-duplicates t)
+  ;; (setq extended-command-history
+  ;;       (delq nil (delete-dups extended-command-history)))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1162,11 +1182,12 @@ before packages are loaded."
   ;; Clojure configurations
   ;;
   ;; Do not indent single ; comment characters
-  ;; (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
+  (add-hook 'clojure-mode-hook
+            (lambda () (setq-local comment-column 0)))
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-  ;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   ;; Lookup functions in Clojure - The Essentail Reference book
   ;; https://github.com/p3r7/clojure-essential-ref
@@ -1403,73 +1424,6 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Configuration no longer used
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Workarounds and bug fixes - temporary hopefully
-  ;;
-  ;; From a community question - not advisable
-  ;; Set a different key binding for evil lisp state
-  ;; (with-eval-after-load 'evil-lisp-state
-  ;;   (spacemacs/set-leader-keys "k" evil-lisp-state-map))
-  ;;
-  ;; evil-escape - switch between insert and normal state
-  ;; (setq-default evil-escape-key-sequence "fd")
-  ;;
-  ;; Undo history size limit, triggering garbage collection
-  ;; Updating all defaults by a power of 10 (adding another zero at the end)
-  ;; default in spacemacs is 80000
-  ;; (setq undo-limit 400000)
-  ;;
-  ;; default in spacemacs is 120000
-  ;; (setq undo-strong-limit 6000000)
-  ;;
-  ;; default in spacemacs is 12000000
-  ;; (setq undo-strong-limit 60000000)
-  ;;
-  ;;
-  ;; disable undo-tree as it seems to be loosing history
-  ;; (global-undo-tree-mode -1)
-  ;;
-  ;; TODO: try explicitly saving history
-  ;; (setq undo-tree-auto-save-history t)
-  ;;
-  ;; TODO: try setting undo-tree tmp files location
-  ;; (setq undo-tree-history-directory-alist '(("." . "~/var/emacs/undo")))
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Literal Searching Configuration
-  ;;
-  ;; Literal search, rather than regex, in spacemacs search - helm-ag
-  ;; (setq-default helm-grep-ag-command-option "-Q")
-  ;;
-  ;; End of Searching Configuration
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Systemd user service
-  ;;
-  ;; Use the exec-path-from-shell package to get PATH, MANPATH
-  ;; and the environment variables from your zsh or bash rc-files.
-  ;;
-  ;; (setq exec-path-from-shell-variables
-  ;;       (append exec-path-from-shell-variables
-  ;;               (list "TERM"
-  ;;                     "RUST_SRC_PATH"
-  ;;                     "…"
-  ;;                     )))
-  ;; (exec-path-from-shell-initialize)
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Neotree configuration
-  ;;
-  ;; Display neotree on the right rather than left (default)
-  ;; (setq neo-window-position 'right)
-  ;;
-  ;; End of Neotree configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
