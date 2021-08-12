@@ -154,8 +154,8 @@ alias termcolor-toggle='alacritty-colorscheme toggle $ALACRITTY_LIGHTTHEME $ALAC
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
 # Vi bindings
-fish_vi_key_bindings
-set vi_mode_default vi_mode_normal
+# fish_vi_key_bindings
+# set vi_mode_default vi_mode_normal
 
 if test -d (brew --prefix)"/share/fish/completions"
     set -gx fish_complete_path $fish_complete_path (brew --prefix)/share/fish/completions
