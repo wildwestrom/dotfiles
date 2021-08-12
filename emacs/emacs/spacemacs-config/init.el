@@ -521,12 +521,11 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; Comment for recording mode
-   dotspacemacs-default-font '(("JetBrainsMono Nerd Font"
+   dotspacemacs-default-font '(("JetBrainsMono Nerd Font Mono"
                                 :size 14.0
                                 :weight normal
                                 :width normal)
-                               ("FiraCode Nerd Font")
-                               ("HackGen35Nerd Console"))
+                               ("Sarasa Mono J"))
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -855,8 +854,8 @@ before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Font for all Unicode chars
-  (when (member "HackGen35Nerd Console" (font-family-list))
-    (set-fontset-font t 'unicode "HackGen35Nerd Console" nil 'prepend))
+  (when (member "Sarasa Mono J" (font-family-list))
+    (set-fontset-font t 'unicode "Sarasa Mono J" nil 'append))
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
