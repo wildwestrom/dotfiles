@@ -75,9 +75,9 @@ This function should only modify configuration layer settings."
      ;; 'prog-mode for only programming languages
      ;; including text-mode may cause issues with org-mode and magit
      (unicode-fonts :variables
-                    unicode-fonts-existence-checks 'all
+                    unicode-fonts-existence-checks 'first
                     unicode-fonts-force-multi-color-on-mac t
-                    unicode-fonts-enable-ligatures nil
+                    unicode-fonts-enable-ligatures t
                     unicode-fonts-ligature-modes '(prog-mode))
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -452,7 +452,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner "~/emacs/spacemacs-config/banners/practicalli-logo.svg"
+   dotspacemacs-startup-banner 'official
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -520,16 +520,13 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   ;; ;; Comment for recording mode
-   ;; dotspacemacs-default-font '("FiraCode Nerd Font"
-   ;;                              :size 12.0
-   ;;                              :weight normal
-   ;;                              :width normal)
-   ;; Uncomment for recording mode
-   dotspacemacs-default-font '("FiraCode Nerd Font"
-                                :size 24.0
+   ;; Comment for recording mode
+   dotspacemacs-default-font '(("JetBrainsMono Nerd Font"
+                                :size 14.0
                                 :weight normal
                                 :width normal)
+                               ("FiraCode Nerd Font")
+                               ("HackGen35Nerd Console"))
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -858,8 +855,18 @@ before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Font for all Unicode chars
-  (when (member "HackGen35Nerd" (font-family-list))
+  (when (member "HackGen35Nerd Console" (font-family-list))
     (set-fontset-font t 'unicode "HackGen35Nerd Console" nil 'prepend))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; This package allows you to set
+  ;; a default scale for text and
+  ;; the ability to scale the text
+  ;; of all buffers at once.
+  (use-package default-text-scale
+    :defer t
+    :config (default-text-scale-mode))
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -922,7 +929,7 @@ before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   ;; Emacs text rendering optimizations
   ;; https://200ok.ch/posts/2020-09-29_comprehensive_guide_on_handling_long_lines_in_emacs.html
 
