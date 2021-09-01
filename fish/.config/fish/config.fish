@@ -23,11 +23,14 @@ set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 
 # Man pages
 set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
-set -gx MANPATH "/usr/local/man" $MANPATH
+set -gx MANPATH "/usr/share/man" $MANPATH
 
 # JDK
-set -gx PATH "$HOME/homebrew/opt/openjdk@16/bin" $PATH
-set -gx JAVA_HOME "$HOME/homebrew/opt/openjdk@16" $JAVA_HOME
+set -gx GRAALVM_HOME "/Library/Java/JavaVirtualMachines/graalvm-ce-java16-21.1.0/Contents/Home/"
+# set -gx PATH "$GRAALVM_HOME/bin" $PATH
+# set -gx JAVA_HOME "$GRAALVM_HOME"
+set -gx PATH "$HOME/homebrew/opt/openjdk/bin" $PATH
+
 # LLVM
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
 

@@ -93,9 +93,12 @@ This function should only modify configuration layer settings."
      ;; `g r' menu in Emacs normal state
      multiple-cursors
 
-     ;; removes annoying caret (^) on M-x
-     (ivy :variables
-          ivy-initial-inputs-alist nil)
+     ;; (ivy :variables
+     ;;      ;; removes annoying caret (^) on M-x
+     ;;      ivy-initial-inputs-alist nil)
+
+     (helm :variables
+           helm-follow-mode-persistent t)
 
      ;; Text-based file manager with preview - SPC a t r r
      (ranger :variables
@@ -137,26 +140,25 @@ This function should only modify configuration layer settings."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      (c-c++ :variables c-c++-enable-clang-support t)
-     cmake
-
-     emacs-lisp
-
-     shell-scripts
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
-              clojure-backend 'lsp
-              clojure-enable-linters nil              ;; clj-kondo included in lsp
+              ;; clojure-backend 'cider               ;; use cider instead of lsp
+              ;; clojure-enable-linters nil           ;; clj-kondo included in lsp
               clojure-enable-clj-refactor t
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
-              clojure-indent-style 'always-align
+              clojure-indent-style 'align-arguments
               clojure-align-forms-automatically t
               clojure-toplevel-inside-comment-form t  ;; evaluate expressions in comment as top level
               cider-result-overlay-position 'at-point ;; results shown right after expression
               cider-overlays-use-font-lock t
               cider-repl-buffer-size-limit 100        ;; limit lines shown in REPL buffer
               )
+     cmake
+
+     emacs-lisp
+
 
      haskell
 
@@ -164,12 +166,17 @@ This function should only modify configuration layer settings."
 
      python
 
+     shell-scripts
+
+     swift
+
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Web Programming
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      html
      javascript
+     php
      typescript
      elm
      purescript
@@ -218,7 +225,6 @@ This function should only modify configuration layer settings."
                               ("\\subsection{%s}" . "\\subsection*{%s}")
                               ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
           )
-     ;; TODO Figure out how org-roam works.
 
      yaml
 
@@ -227,6 +233,8 @@ This function should only modify configuration layer settings."
      ;; Programming Tools
      ;;
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+     docker
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Version Control
@@ -273,8 +281,9 @@ This function should only modify configuration layer settings."
           ;; Formatting and indentation - use Cider instead
           lsp-enable-on-type-formatting nil
           ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation t
-          lsp-enable-snippet t  ;; to test again
+          ;; Default t
+          ;; lsp-enable-indentation nil
+          ;; lsp-enable-snippet t  ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
@@ -289,7 +298,7 @@ This function should only modify configuration layer settings."
           ;; lsp-ui-doc-enable nil             ;; disable all doc popups
           lsp-ui-doc-show-with-cursor t     ;; doc popup for cursor
           lsp-ui-doc-show-with-mouse nil    ;; doc popup for mouse
-          lsp-ui-doc-delay 1                ;; delay in seconds for popup to display
+          lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
 
           ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
@@ -305,7 +314,7 @@ This function should only modify configuration layer settings."
           ;; Optimization for large files
           lsp-file-watch-threshold 10000
 
-          lsp-idle-delay 1.000
+          lsp-idle-delay 5.000
 
           lsp-log-io nil)
 
@@ -521,7 +530,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; Comment for recording mode
-   dotspacemacs-default-font '(("JetBrainsMono Nerd Font Mono"
+   dotspacemacs-default-font '(("JetBrainsMono Nerd Font"
                                 :size 14.0
                                 :weight normal
                                 :width normal)
@@ -875,19 +884,10 @@ before packages are loaded."
     :defer t)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Truncate lines by default
   (setq truncate-lines t)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Remvoe annoying caret (^)
-  ;; when doing M-x with ivy
-  (setq ivy-initial-inputs-alist nil)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; GC Messages
@@ -959,14 +959,14 @@ before packages are loaded."
   ;; Doom theme settings
   (setq doom-gruvbox-light-variant "hard")
   ;;
-  (defun practicalli/setup-custom-doom-modeline ()
-    (doom-modeline-set-modeline 'practicalli-modeline 'default))
+  (defun wildwestrom/setup-custom-doom-modeline ()
+    (doom-modeline-set-modeline 'my-modeline 'default))
   ;;
   (with-eval-after-load 'doom-modeline
-    (doom-modeline-def-modeline 'practicalli-modeline
-      '(workspace-name window-number modals persp-name buffer-info matches remote-host vcs)
+    (doom-modeline-def-modeline 'my-modeline
+      '(workspace-name window-number modals line-number persp-name buffer-info matches remote-host vcs)
       '(misc-info repl lsp))
-    (practicalli/setup-custom-doom-modeline))
+    (wildwestrom/setup-custom-doom-modeline))
 
   ;; checker = flycheck results (not working)
   ;; buffer-position
@@ -1018,10 +1018,10 @@ before packages are loaded."
   (setq-default display-line-numbers-width nil)
   ;;
   ;; replace / search with helm-swoop in Evil normal state
-  ;; (evil-global-set-key 'normal "/" 'helm-swoop)
+  (evil-global-set-key 'normal "/" 'helm-swoop)
   ;;
   ;; replace / search with ivy-swiper in Evil normal state
-  (evil-global-set-key 'normal "/" 'swiper)
+  ;; (evil-global-set-key 'normal "/" 'swiper)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
