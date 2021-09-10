@@ -2,4 +2,9 @@
         :aliases      {"jet" ["run" "-m" "jet.main"]}
         :plugins      [[cider/cider-nrepl "0.26.0"]
                        [refactor-nrepl    "2.5.1"]
-                       [lein-ancient "0.7.0"]]}}
+                       [lein-ancient "0.7.0"]]}
+ :android-common {:android {:sdk-path "/Users/main/Library/Android/sdk"}}
+ :android-user {:dependencies [[cider/cider-nrepl "0.26.0"]]
+                :android      {:aot-exclude-ns ["cider.nrepl.middleware.util.java.parser"
+                                                "cider.nrepl" "cider-nrepl.plugin"]}}
+}

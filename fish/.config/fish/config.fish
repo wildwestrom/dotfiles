@@ -26,10 +26,14 @@ set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 set -gx MANPATH "/usr/share/man" $MANPATH
 
 # JDK
-set -gx GRAALVM_HOME "/Library/Java/JavaVirtualMachines/graalvm-ce-java16-21.1.0/Contents/Home/"
+# set -gx GRAALVM_HOME "/Library/Java/JavaVirtualMachines/graalvm-ce-java16-21.1.0/Contents/Home/"
 # set -gx PATH "$GRAALVM_HOME/bin" $PATH
 # set -gx JAVA_HOME "$GRAALVM_HOME"
-set -gx PATH "$HOME/homebrew/opt/openjdk/bin" $PATH
+# set -gx PATH "$HOME/homebrew/Cellar/openjdk/16.0.2/bin" $PATH
+# set -gx PATH "$HOME/homebrew/Cellar/openjdk@8/1.8.0+302/bin" $PATH
+
+set PATH $HOME/.jenv/bin $PATH
+set -gx ANDROID_HOME "$HOME/Library/Android/sdk/"
 
 # LLVM
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
@@ -167,3 +171,5 @@ end
 if test -d (brew --prefix)"/share/fish/vendor_completions.d"
     set -gx fish_complete_path $fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
 end
+
+status --is-interactive; and source (jenv init -|psub)
