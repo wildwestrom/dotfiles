@@ -211,21 +211,13 @@ This function should only modify configuration layer settings."
           org-enable-roam-support t
           org-enable-roam-protocol t
           org-roam-directory "~/Documents/org/Notes/"
+          org-roam-dailies-directory "Journal/"
           org-roam-v2-ack t
           org-want-todo-bindings t
-          org-enable-org-journal-support t
-          org-journal-dir "~/Documents/org/Notes/Journal"
-          org-journal-file-format "%Y-%m-%d"
-          org-journal-date-prefix "#+TITLE: "
-          org-journal-date-format "%A, %B %d %Y"
-          org-journal-time-prefix "* "
-          org-journal-time-format ""
-          org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\""
           org-latex-classes '("letter" "\\documentclass{letter}"
                               ("\\section{%s}" . "\\section*{%s}")
                               ("\\subsection{%s}" . "\\subsection*{%s}")
-                              ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-          )
+                              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
 
      yaml
 
@@ -352,7 +344,11 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(svelte-mode)
+   dotspacemacs-additional-packages '(svelte-mode
+                                      websocket
+                                      simple-httpd
+                                      (org-roam-ui :location (recipe :fetcher github
+                                                                     :repo "org-roam/org-roam-ui")))
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -367,7 +363,7 @@ This function should only modify configuration layer settings."
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
-   dotspacemacs-install-packages 'used-only))
+   dotspacemacs-install-packages 'used-but-keep-unused))
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -863,6 +859,38 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; org-roam-ui config
+  (use-package websocket
+               :after org-roam)
+
+  (use-package org-roam-ui
+               :after org ;; or :after org-roam
+               ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+               ;;         a hookable mode anymore, you're advised to pick something yourself
+               ;;         if you don't care about startup time, use
+               ;;  :hook (after-init . org-roam-ui-mode)
+               :config
+               (setq org-roam-ui-sync-theme t
+                     org-roam-ui-follow t
+                     org-roam-ui-update-on-save t
+                     org-roam-ui-open-on-start t))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; org-roam-graph config
+  (setq org-roam-graph-extra-config
+        '(("rankdir" . "TB")
+          ("layout" . "sfdp")
+          ("ratio" . "auto")
+          ("overlap" . "prism")
+          ("overlap_scaling" . "10")
+          ("nodesep" . "10")
+          ("splines" . "true")) org-roam-graph-max-title-length 25
+          org-roam-graph-shorten-titles 'wrap)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Try to prevent savehist from eating so much RAM.
   (setq history-length 100)
   (put 'minibuffer-history 'history-length 50)
@@ -992,9 +1020,6 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; User key bindings
   ;;
-  ;; org-journal - create a new journal entry - `, j' in org-journal mode
-  (spacemacs/set-leader-keys "oj" 'org-journal-new-entry)
-  ;;
   ;; Toggle workspaces forward/backwards
   (spacemacs/set-leader-keys "ow" 'eyebrowse-next-window-config)
   (spacemacs/set-leader-keys "oW" 'eyebrowse-last-window-config)
@@ -1041,19 +1066,19 @@ before packages are loaded."
   ;; Set the files that are searched for writing tokens
   ;; by default ~/.authinfo will be used
   ;; and write a token in unencrypted format
-  (setq auth-sources '("~/.authinfo.gpg"))
+  ;; (setq auth-sources '("~/.authinfo.gpg"))
   ;;
   ;; Configure number of topics show, open and closed
   ;; use negative number to toggle the view of closed topics
   ;; using `SPC SPC forge-toggle-closed-visibility'
-  (setq  forge-topic-list-limit '(100 . -10))
+  ;; (setq  forge-topic-list-limit '(100 . -10))
   ;; set closed to 0 to never show closed issues
   ;; (setq  forge-topic-list-limit '(100 . 0))
   ;;
   ;; GitHub user and organization accounts owned
   ;; used by @ c f  to create a fork
-  (setq forge-owned-accounts
-        '(("wildwestrom")))
+  ;; (setq forge-owned-accounts
+  ;;       '(("wildwestrom")))
   ;; To blacklist specific accounts,
   ;; over-riding forge-owned-accounts
   ;; (setq forge-owned-blacklist
@@ -1108,7 +1133,7 @@ before packages are loaded."
   ;;
   ;; Org-reveal - define were reveal.js files can be found
   ;; (I place reveal.js files in same directory as I write the org files)
-  (setq org-reveal-root "")
+  ;; (setq org-reveal-root "")
   ;;
   ;; Define the location of the file to hold tasks
   ;; (with-eval-after-load 'org
