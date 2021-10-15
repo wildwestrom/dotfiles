@@ -528,7 +528,7 @@ It should only modify the values of Spacemacs settings."
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; Comment for recording mode
    dotspacemacs-default-font '(("JetBrainsMono Nerd Font"
-                                :size 14.0
+                                :size 18.0
                                 :weight normal
                                 :width normal)
                                ("Sarasa Mono J"))
@@ -1463,25 +1463,3 @@ before packages are loaded."
   ;; End of dot-spacemacs/user-config
 
   )
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-export-allow-bind-keywords t)
- '(package-selected-packages
-   '(auctex-latexmk yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unkillable-scratch unicode-fonts undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org tide terminal-here tagedit symon symbol-overlay swift-mode svelte-mode string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pyenv-mode py-isort pug-mode psci psc-ide prettier-js popwin poetry pippel pipenv pip-requirements phpunit phpcbf php-extras php-auto-yasnippets password-generator paradox ox-twbs ox-gfm ox-asciidoc overseer orgit-forge org-superstar org-roam org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-todos macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-java lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint ligature keycast json-navigator js2-refactor js-doc insert-shebang info+ indent-guide importmagic impatient-mode hybrid-mode hungry-delete hlint-refactor hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-ctest helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag haskell-snippets groovy-mode groovy-imports grip-mode graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md geben fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flycheck-elm flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-vimish-fold evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elm-test-runner elm-mode elisp-slime-nav editorconfig dumb-jump drupal-mode drag-stuff dotenv-mode doom-themes doom-modeline dockerfile-mode docker disaster dired-quick-sort diminish diff-hl define-word dante cython-mode csv-mode cpp-auto-include company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-phpactor company-php company-math company-emoji company-cabal company-c-headers company-auctex company-anaconda command-log-mode column-enforce-mode color-identifiers-mode cmm-mode cmake-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode ccls browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
- '(warning-suppress-types '((comp))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mode-line ((t (:height 0.92))))
- '(mode-line-inactive ((t (:height 0.92)))))
-)

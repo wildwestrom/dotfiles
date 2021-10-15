@@ -25,7 +25,7 @@ set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 set -gx MANPATH "/usr/share/man" $MANPATH
 
-# JDK
+# JVM
 # set -gx GRAALVM_HOME "/Library/Java/JavaVirtualMachines/graalvm-ce-java16-21.1.0/Contents/Home/"
 # set -gx PATH "$GRAALVM_HOME/bin" $PATH
 # set -gx JAVA_HOME "$GRAALVM_HOME"
@@ -33,7 +33,13 @@ set -gx MANPATH "/usr/share/man" $MANPATH
 # set -gx PATH "$HOME/homebrew/Cellar/openjdk@8/1.8.0+302/bin" $PATH
 
 set PATH $HOME/.jenv/bin $PATH
+
+# Android tools
 set -gx ANDROID_HOME "$HOME/Library/Android/sdk/"
+set -gx PATH "$ANDROID_HOME/emulator" $PATH
+set -gx PATH "$ANDROID_HOME/tools" $PATH
+set -gx PATH "$ANDROID_HOME/tools/bin" $PATH
+set -gx PATH "$ANDROID_HOME/platform-tools" $PATH
 
 # LLVM
 set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
@@ -63,9 +69,6 @@ set -gx PATH "$HOME/.rvm/bin" $PATH
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
 set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/vim-iced/bin" $PATH
 
-# Android tools
-set -gx PATH "$HOME/.local/bin/platform-tools" $PATH
-
 # Cargo and rust tools
 set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
 set -gx PATH "$CARGO_HOME/bin" $PATH
@@ -78,7 +81,7 @@ set -gx NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
 set -gx PATH "$NPM_CONFIG_PREFIX/bin" $PATH
 
 # Ruby gem path
-set -gx PATH "$HOME/homebrew/lib/ruby/gems/3.0.0/bin/" $PATH
+# set -gx PATH "$HOME/homebrew/lib/ruby/gems/3.0.0/bin/" $PATH
 
 # Default programs:
 set -gx EDITOR "nvim"
@@ -98,7 +101,6 @@ set -gx INPUTRC "$XDG_CONFIG_HOME/inputrc"
 set -gx WINEPREFIX "$HOME/.local/share/wineprefixes/default"
 set -gx PASSWORD_STORE_DIR "$HOME/.local/share/password-store"
 set -gx TMUX_TMPDIR "$XDG_RUNTIME_DIR"
-set -gx ANDROID_SDK_HOME "$XDG_CONFIG_HOME/android"
 set -gx GOPATH "$HOME/.local/share/go"
 set -gx ANSIBLE_CONFIG "$XDG_CONFIG_HOME/ansible/ansible.cfg"
 set -gx UNISON "$HOME/.local/share/unison"
@@ -173,3 +175,5 @@ if test -d (brew --prefix)"/share/fish/vendor_completions.d"
 end
 
 status --is-interactive; and source (jenv init -|psub)
+
+fish_vi_key_bindings

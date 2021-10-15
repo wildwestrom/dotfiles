@@ -19,3 +19,7 @@
 	user = wildwestrom
 [gitlab]
 	user = wildwestrom
+[color]
+	ui = auto
+[commit]
+	gpgsign = true
