@@ -52,10 +52,10 @@ This function should only modify configuration layer settings."
 
      ;; Nyan cat indicating relative position in current buffer
      ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
-     colors
+     ;;colors
 
      ;; Include emojis into everything
-     emoji
+     ;;emoji
 
      ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
      (spacemacs-modeline :variables
@@ -111,9 +111,12 @@ This function should only modify configuration layer settings."
      ;; Visual file manager - `SPC p t'
      ;; treemacs-no-png-images t removes file and directory icons
      (treemacs :variables
+               treemacs-lock-width t
+               treemacs-width 20
                treemacs-indentation 1
                treemacs-use-filewatch-mode t
-               treemacs-use-follow-mode t)
+               ;treemacs-use-follow-mode t
+               )
      ;; (neotree :variables
      ;;          neo-theme 'icons
      ;;          neo-vc-integration '(face))
@@ -159,26 +162,27 @@ This function should only modify configuration layer settings."
 
      emacs-lisp
 
-     haskell
+     ;; haskell
 
      java
 
-     python
+     ;; python
 
      shell-scripts
 
-     swift
+     ;; swift
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Web Programming
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      html
-     javascript
+     (javascript :variables
+                 javascript-backend 'lsp)
      php
      typescript
-     elm
-     purescript
+     ;; elm
+     ;; purescript
      ;; Frameworks
      vue
      react
@@ -193,9 +197,9 @@ This function should only modify configuration layer settings."
 
      json
 
-     (latex :variables
-            latex-backend 'lsp
-            latex-refresh-preview t)
+     ;; (latex :variables
+     ;;        latex-backend 'lsp
+     ;;        latex-refresh-preview t)
 
      (markdown :variables
                markdown-live-preview-engine 'vmd)
@@ -228,6 +232,10 @@ This function should only modify configuration layer settings."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      docker
+
+     ;; Pair programming!
+     floobits
+
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Version Control
@@ -276,7 +284,7 @@ This function should only modify configuration layer settings."
           ;; Set to nil to use CIDER features instead of LSP UI
           ;; Default t
           ;; lsp-enable-indentation nil
-          ;; lsp-enable-snippet t  ;; to test again
+          lsp-enable-snippet t  ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
@@ -344,8 +352,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(svelte-mode
-                                      websocket
+   dotspacemacs-additional-packages '(websocket
                                       simple-httpd
                                       (org-roam-ui :location (recipe :fetcher github
                                                                      :repo "org-roam/org-roam-ui")))
@@ -528,7 +535,7 @@ It should only modify the values of Spacemacs settings."
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; Comment for recording mode
    dotspacemacs-default-font '(("JetBrainsMono Nerd Font"
-                                :size 18.0
+                                :size 14
                                 :weight normal
                                 :width normal)
                                ("Sarasa Mono J"))
@@ -962,7 +969,6 @@ before packages are loaded."
         (remove-hook 'pre-command-hook 'keycast-mode-line-update)
         (setq global-mode-string (remove '("" mode-line-keycast " ") mode-line-misc-info))))
     )
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -1014,27 +1020,6 @@ before packages are loaded."
   ;; process ??
   ;; debug
   ;; misc-info  - used for keycast
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; User key bindings
-  ;;
-  ;; Toggle workspaces forward/backwards
-  (spacemacs/set-leader-keys "ow" 'eyebrowse-next-window-config)
-  (spacemacs/set-leader-keys "oW" 'eyebrowse-last-window-config)
-
-  ;; Revert buffer - loads in .dir-locals.el changes
-  (spacemacs/set-leader-keys "oR" 'revert-buffer)
-  ;;
-  ;; Keycast mode - show key bindings and commands in mode line
-  (spacemacs/set-leader-keys "ok" 'keycast-mode)
-
-  ;; Replace Emacs Tabs key bindings with Workspace key bindings
-  (with-eval-after-load 'evil-maps
-    (when (featurep 'tab-bar)
-      (define-key evil-normal-state-map "gt" nil)
-      (define-key evil-normal-state-map "gT" nil)))
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1284,7 +1269,7 @@ before packages are loaded."
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-css-indent-offset  2)
     (setq web-mode-code-indent-offset 2))
-  ;;
+
   (add-hook 'web-mode-hook  'web-mode-indent-2-hook)
   ;;
   ;; End of Web-mode configuration
@@ -1460,6 +1445,40 @@ before packages are loaded."
   ;; End of Spaceline Doom theme settings
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Get GPG pinentry working
+  (require 'epg)
+  (setq epg-pinentry-mode 'loopback)
+  (pinentry-start)
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   ;; End of dot-spacemacs/user-config
 
   )
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(safe-local-variable-values
+   '((cider-known-endpoints
+      ("localhost" "8776"))
+     (typescript-backend . tide)
+     (typescript-backend . lsp)
+     (javascript-backend . tide)
+     (javascript-backend . tern)
+     (javascript-backend . lsp))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mode-line ((t (:height 0.92))))
+ '(mode-line-inactive ((t (:height 0.92)))))
+)

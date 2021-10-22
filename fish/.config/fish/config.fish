@@ -3,109 +3,98 @@
 # Remove default greeting
 set fish_greeting
 
-## Path Variables
-
-set -gx XDG_CONFIG_HOME "$HOME/.config"
-set -gx XDG_DATA_HOME "$HOME/.local/share"
-set -gx XDG_CACHE_HOME "$HOME/.cache"
-
-# Homebrew
-set -gx PATH "$HOME/homebrew/bin"  $PATH
-set -gx PATH "$HOME/homebrew/sbin" $PATH
-set -gx PATH "$HOME/homebrew/sbin" $PATH
-
-# C Include Path
-set -gx C_INCLUDE_PATH "/usr/local/include"
-set -gx C_INCLUDE_PATH "$HOME/homebrew/include" $C_INCLUDE_PATH
-
-# GNU Coreutils
-set -gx PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
-
-# Man pages
-set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
-set -gx MANPATH "/usr/share/man" $MANPATH
-
-# JVM
-# set -gx GRAALVM_HOME "/Library/Java/JavaVirtualMachines/graalvm-ce-java16-21.1.0/Contents/Home/"
-# set -gx PATH "$GRAALVM_HOME/bin" $PATH
-# set -gx JAVA_HOME "$GRAALVM_HOME"
-# set -gx PATH "$HOME/homebrew/Cellar/openjdk/16.0.2/bin" $PATH
-# set -gx PATH "$HOME/homebrew/Cellar/openjdk@8/1.8.0+302/bin" $PATH
-
-set PATH $HOME/.jenv/bin $PATH
-
-# Android tools
-set -gx ANDROID_HOME "$HOME/Library/Android/sdk/"
-set -gx PATH "$ANDROID_HOME/emulator" $PATH
-set -gx PATH "$ANDROID_HOME/tools" $PATH
-set -gx PATH "$ANDROID_HOME/tools/bin" $PATH
-set -gx PATH "$ANDROID_HOME/platform-tools" $PATH
-
-# LLVM
-set -gx PATH "$HOME/homebrew/opt/llvm/bin" $PATH
-
-# Nvim Plugins
-set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
-
-# Latex Variables
-set -gx PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
-set -gx PATH "/Library/TeX/texbin" $PATH
-set -gx MANPATH "/usr/local/texlive/2021/texmf-dist/doc/man" $MANPATH
-set -gx INFOPATH "/usr/local/texlive/2021/texmf-dist/doc/info" $INFOPATH
-
-# Adds `~/.local/bin` to $PATH
-set -gx PATH "$HOME/.local/bin" $PATH
-
-# Homebrew options.
-set -gx HOMEBREW_NO_ANALYTICS 1 $HOMEBREW_NO_ANALYTICS
-set -gx HOMEBREW_NO_INSECURE_REDIRECT 1 $HOMEBREW_NO_INSECURE_REDIRECT
-set -gx HOMEBREW_CASK_OPTS "--appdir=~/Applications" $HOMEBREW_CASK_OPTS
-set -gx HOMEBREW_CASK_OPTS "--build-from-source" $HOMEBREW_CASK_OPTS
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-set -gx PATH "$HOME/.rvm/bin" $PATH
-
-# Neovim plugins
-set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
-set -gx PATH "$XDG_CONFIG_HOME/nvim/plugged/vim-iced/bin" $PATH
-
-# Cargo and rust tools
-set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
-set -gx PATH "$CARGO_HOME/bin" $PATH
-
-# Doom Emacs
-set -gx PATH "$HOME/emacs/doom-emacs/bin" $PATH
-
-# Node.js npm
-set -gx NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
-set -gx PATH "$NPM_CONFIG_PREFIX/bin" $PATH
-
-# Ruby gem path
-# set -gx PATH "$HOME/homebrew/lib/ruby/gems/3.0.0/bin/" $PATH
+# First line removes the path; second line sets it.  Without the first line, # your path gets massive and fish becomes very slow.
+set -e fish_user_paths 
 
 # Default programs:
-set -gx EDITOR "nvim"
-set -gx VISUAL "nvim"
-set -gx READER "less"
+set EDITOR "nvim"
+set VISUAL "nvim"
+set READER "less"
+
+# Man pages
+set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+set -x MANPATH "/usr/share/man" $MANPATH
+
+## Path Variables
+set -x XDG_CONFIG_HOME "$HOME/.config"
+set -x XDG_DATA_HOME "$HOME/.local/share"
+set -x XDG_CACHE_HOME "$HOME/.cache"
+set -x PATH "$HOME/.local/bin" $PATH
+
+# Homebrew
+set -x PATH "$HOME/homebrew/bin"  $PATH
+set -x PATH "$HOME/homebrew/sbin" $PATH
+
+# C Include Path
+set -x C_INCLUDE_PATH "/usr/local/include"
+set -x C_INCLUDE_PATH "$HOME/homebrew/include" $C_INCLUDE_PATH
+
+# GNU Coreutils
+set -x PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
+
+# JVM
+set -x PATH $HOME/.jenv/bin $PATH
+
+# Android tools
+set -x ANDROID_HOME "$HOME/Library/Android/sdk/"
+set -x PATH "$ANDROID_HOME/emulator" $PATH
+set -x PATH "$ANDROID_HOME/tools" $PATH
+set -x PATH "$ANDROID_HOME/tools/bin" $PATH
+set -x PATH "$ANDROID_HOME/platform-tools" $PATH
+
+# LLVM
+set -x PATH "$HOME/homebrew/opt/llvm/bin" $PATH
+
+# Nvim Plugins
+set -x PATH "$XDG_CONFIG_HOME/nvim/plugged/" $PATH
+
+# Latex Variables
+set -x PATH "/usr/local/texlive/2021/bin/universal-darwin/" $PATH
+set -x PATH "/Library/TeX/texbin" $PATH
+set -x MANPATH "/usr/local/texlive/2021/texmf-dist/doc/man" $MANPATH
+set -x INFOPATH "/usr/local/texlive/2021/texmf-dist/doc/info" $INFOPATH
+
+# Homebrew options.
+set -x HOMEBREW_NO_ANALYTICS 1 $HOMEBREW_NO_ANALYTICS
+set -x HOMEBREW_NO_INSECURE_REDIRECT 1 $HOMEBREW_NO_INSECURE_REDIRECT
+set -x HOMEBREW_CASK_OPTS "--appdir=~/Applications" $HOMEBREW_CASK_OPTS
+set -x HOMEBREW_CASK_OPTS "--build-from-source" $HOMEBREW_CASK_OPTS
+
+# Neovim plugins
+set -x PATH "$XDG_CONFIG_HOME/nvim/plugged" $PATH
+set -x PATH "$XDG_CONFIG_HOME/nvim/plugged/vim-iced/bin" $PATH
+
+# Cargo and rust tools
+set -x CARGO_HOME "$XDG_DATA_HOME/cargo"
+set -x PATH "$CARGO_HOME/bin" $PATH
+
+# Doom Emacs
+set -x PATH "$HOME/emacs/doom-emacs/bin" $PATH
+
+# Node.js npm
+set -x NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
+set -x PATH "$NPM_CONFIG_PREFIX/bin" $PATH
 
 # ~/ Clean-up:
-set -gx NOTMUCH_CONFIG "$XDG_CONFIG_HOME/notmuch-config"
-set -gx GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
-set -gx SPACEVIMDIR "$XDG_CONFIG_HOME/SpaceVim/"
-# set -gx XINITRC "$XDG_CONFIG_HOME/x11/xinitrc"
-set -gx LESSHISTFILE "-"
-set -gx NREPL_CONFIG_DIR "$XDG_CONFIG_HOME/clojure/nrepl/"
-set -gx WGETRC "$XDG_CONFIG_HOME/wget/wgetrc"
-set -gx INPUTRC "$XDG_CONFIG_HOME/inputrc"
-# set -gx GNUPGHOME "$XDG_DATA_HOME/gnupg"
-set -gx WINEPREFIX "$HOME/.local/share/wineprefixes/default"
-set -gx PASSWORD_STORE_DIR "$HOME/.local/share/password-store"
-set -gx TMUX_TMPDIR "$XDG_RUNTIME_DIR"
-set -gx GOPATH "$HOME/.local/share/go"
-set -gx ANSIBLE_CONFIG "$XDG_CONFIG_HOME/ansible/ansible.cfg"
-set -gx UNISON "$HOME/.local/share/unison"
-set -gx HISTFILE "$HOME/.local/share/history"
-set -gx TESSDATA_PREFIX "$HOME/homebrew/share/tessdata/"
+set -x NOTMUCH_CONFIG "$XDG_CONFIG_HOME/notmuch-config"
+set -x GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
+set -x SPACEVIMDIR "$XDG_CONFIG_HOME/SpaceVim/"
+# set -x XINITRC "$XDG_CONFIG_HOME/x11/xinitrc"
+set -x LESSHISTFILE "-"
+set -x NREPL_CONFIG_DIR "$XDG_CONFIG_HOME/clojure/nrepl/"
+set -x WGETRC "$XDG_CONFIG_HOME/wget/wgetrc"
+set -x INPUTRC "$XDG_CONFIG_HOME/inputrc"
+# set -x GNUPGHOME "$XDG_DATA_HOME/gnupg"
+set -x WINEPREFIX "$HOME/.local/share/wineprefixes/default"
+set -x PASSWORD_STORE_DIR "$HOME/.local/share/password-store"
+set -x TMUX_TMPDIR "$XDG_RUNTIME_DIR"
+set -x GOPATH "$HOME/.local/share/go"
+set -x UNISON "$HOME/.local/share/unison"
+set -x HISTFILE "$HOME/.local/share/history"
+set -x TESSDATA_PREFIX "$HOME/homebrew/share/tessdata/"
+
+# GPG
+set -x GPG_TTY (tty)
 
 ### ALIASES
 
@@ -114,7 +103,7 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -iv'
 alias mkd='mkdir -pv'
-# alias cat='bat'
+alias cat='bat'
 alias yt='youtube-dl --add-metadata -i'
 alias yta='yt -x -f bestaudio/best'
 alias ffmpeg='ffmpeg -hide_banner'
@@ -163,17 +152,18 @@ alias termcolor-toggle='alacritty-colorscheme toggle $ALACRITTY_LIGHTTHEME $ALAC
 alias tmux='tmux -f $HOME/.config/tmux/tmux.conf'
 
 # Vi bindings
-# fish_vi_key_bindings
+function fish_user_key_bindings
+  fish_vi_key_bindings
+end
+
 # set vi_mode_default vi_mode_normal
 
-if test -d (brew --prefix)"/share/fish/completions"
-    set -gx fish_complete_path $fish_complete_path (brew --prefix)/share/fish/completions
-end
-
-if test -d (brew --prefix)"/share/fish/vendor_completions.d"
-    set -gx fish_complete_path $fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
-end
+# if test -d (brew --prefix)"/share/fish/completions"
+#     set -x fish_complete_path $fish_complete_path (brew --prefix)/share/fish/completions
+# end
+# 
+# if test -d (brew --prefix)"/share/fish/vendor_completions.d"
+#     set -x fish_complete_path $fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
+# end
 
 status --is-interactive; and source (jenv init -|psub)
-
-fish_vi_key_bindings
