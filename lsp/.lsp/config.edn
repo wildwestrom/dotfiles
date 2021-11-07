@@ -41,6 +41,9 @@
  ;;  use ^:private metadata for private scope rather than defn-
  ;; :use-metadata-for-privacy? true
 
+ :project-specs [{:project-path "bb.edn"
+                  :classpath-cmd ["bb" "/Users/main/.local/share/bb/bbcp.clj"]}]
+
  #_#_:linters   {:unused-namespace-declarations #{"postman"}}
  #_#_:clj-kondo {:skip-comments true
                  :linters       {:refer-all         {:exclude [clojure.test midje.sweet]}
