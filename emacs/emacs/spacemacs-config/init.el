@@ -112,7 +112,7 @@ This function should only modify configuration layer settings."
      ;; treemacs-no-png-images t removes file and directory icons
      (treemacs :variables
                treemacs-lock-width t
-               treemacs-width 20
+               treemacs-width 22
                treemacs-indentation 1
                treemacs-use-filewatch-mode t
                ;treemacs-use-follow-mode t
@@ -142,12 +142,15 @@ This function should only modify configuration layer settings."
      ;;
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     (c-c++ :variables c-c++-enable-clang-support t)
+     ;; apl+variants
+
+     ;; (c-c++ :variables c-c++-enable-clang-support t)
+     ;; cmake
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
               ;; clojure-backend 'cider               ;; use cider instead of lsp
-              ;; clojure-enable-linters nil           ;; clj-kondo included in lsp
+              ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
               clojure-enable-clj-refactor t
               cider-repl-display-help-banner nil      ;; disable help banner
               cider-pprint-fn 'fipp                   ;; fast pretty printing
@@ -157,16 +160,23 @@ This function should only modify configuration layer settings."
               cider-result-overlay-position 'at-point ;; results shown right after expression
               cider-overlays-use-font-lock t
               cider-repl-buffer-size-limit 100        ;; limit lines shown in REPL buffer
+              cider-eldoc-display-for-symbol-at-point nil
               )
-     cmake
 
      emacs-lisp
 
-     ;; haskell
+     ;; (go :variables
+     ;;     go-backend 'lsp)
+
+     haskell
 
      java
 
      ;; python
+
+     ;; racket
+
+     rust
 
      shell-scripts
 
@@ -177,15 +187,20 @@ This function should only modify configuration layer settings."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      html
+     (php :variables php-backend 'lsp)
+     gtags ;; seems to fix the problem of not detecting closing tags
+
      (javascript :variables
                  javascript-backend 'lsp)
-     php
      typescript
+     ;; Frameworks
+     ;; vue
+     react
+
      ;; elm
      ;; purescript
-     ;; Frameworks
-     vue
-     react
+
+     prettier
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Document/Data Formats
@@ -206,7 +221,6 @@ This function should only modify configuration layer settings."
 
      ;; Spacemacs Org mode
      (org :variables
-          ;; TODO Figure out why sound doesn't work on MacOS
           org-clock-sound "~/emacs/spacemacs-config/bell.wav"
           org-enable-github-support t
           org-enable-asciidoc-support t
@@ -231,6 +245,7 @@ This function should only modify configuration layer settings."
      ;;
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+     ;; Containers
      docker
 
      ;; Pair programming!
@@ -336,9 +351,11 @@ This function should only modify configuration layer settings."
      ;; To run your terminal shell, add
      ;; shell-default-shell 'vterm
      (shell :variables
-            shell-default-shell 'eshell
-            shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-shell 'vterm
+            shell-default-term-shell "~/homebrew/bin/fish"
+            shell-default-width 30
+            shell-default-position 'bottom
+            terminal-here-mac-terminal-command 'iterm2)
 
 
      ) ;; End of dotspacemacs-configuration-layers
@@ -352,10 +369,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(websocket
-                                      simple-httpd
-                                      (org-roam-ui :location (recipe :fetcher github
-                                                                     :repo "org-roam/org-roam-ui")))
+   dotspacemacs-additional-packages '()
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -866,25 +880,6 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; org-roam-ui config
-  (use-package websocket
-               :after org-roam)
-
-  (use-package org-roam-ui
-               :after org ;; or :after org-roam
-               ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-               ;;         a hookable mode anymore, you're advised to pick something yourself
-               ;;         if you don't care about startup time, use
-               ;;  :hook (after-init . org-roam-ui-mode)
-               :config
-               (setq org-roam-ui-sync-theme t
-                     org-roam-ui-follow t
-                     org-roam-ui-update-on-save t
-                     org-roam-ui-open-on-start t))
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; org-roam-graph config
   (setq org-roam-graph-extra-config
         '(("rankdir" . "TB")
@@ -1076,8 +1071,6 @@ before packages are loaded."
   ;; Safe structural editing
   ;; for all major modes
   (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
-  ;; for clojure layer only (comment out line above)
-  ;; (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hook-clojure-mode)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1275,118 +1268,8 @@ before packages are loaded."
   ;; End of Web-mode configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Eshell visual enhancements
-  ;;
-  ;; Add git status visual labels
-  ;;
-  (require 'dash)
-  (require 's)
-  ;;
-  (defmacro with-face (STR &rest PROPS)
-    "Return STR propertized with PROPS."
-    `(propertize ,STR 'face (list ,@PROPS)))
-  ;;
-  (defmacro esh-section (NAME ICON FORM &rest PROPS)
-    "Build eshell section NAME with ICON prepended to evaled FORM with PROPS."
-    `(setq ,NAME
-           (lambda () (when ,FORM
-                        (-> ,ICON
-                          (concat esh-section-delim ,FORM)
-                          (with-face ,@PROPS))))))
-  ;;
-  (defun esh-acc (acc x)
-    "Accumulator for evaluating and concatenating esh-sections."
-    (--if-let (funcall x)
-        (if (s-blank? acc)
-            it
-          (concat acc esh-sep it))
-      acc))
-  ;;
-  (defun esh-prompt-func ()
-    "Build `eshell-prompt-function'"
-    (concat esh-header
-            (-reduce-from 'esh-acc "" eshell-funcs)
-            "\n"
-            eshell-prompt-string))
-  ;;
-  ;;
-  ;; Unicode icons on Emacs
-  ;; `list-character-sets' and select unicode-bmp
-  ;; scroll through bitmaps list to find the one you want
-  ;; some bitmaps seem to change
-  ;;
-  (esh-section esh-dir
-               "\xf07c"  ;  (faicon folder)
-               (abbreviate-file-name (eshell/pwd))
-               '(:foreground "olive" :bold bold :underline t))
-  ;;
-  (esh-section esh-git
-               "\xf397"  ;  (git branch icon)
-               (magit-get-current-branch)
-               '(:foreground "maroon"))
-  ;;
-  ;; (esh-section esh-python
-  ;;              "\xe928"  ;  (python icon)
-  ;;              pyvenv-virtual-env-name)
-  ;;
-  (esh-section esh-clock
-               ""  ;  (clock icon)
-               (format-time-string "%H:%M" (current-time))
-               '(:foreground "forest green"))
-  ;;
-  ;; Below I implement a "prompt number" section
-  (setq esh-prompt-num 0)
-  (add-hook 'eshell-exit-hook (lambda () (setq esh-prompt-num 0)))
-  (advice-add 'eshell-send-input :before
-              (lambda (&rest args) (setq esh-prompt-num (incf esh-prompt-num))))
-  ;;
-  ;;
-  ;; "\xf0c9"  ;  (list icon)
-  (esh-section esh-num
-               "\x2130"  ;  ℰ (eshell icon)
-               (number-to-string esh-prompt-num)
-               '(:foreground "brown"))
-  ;;
-  ;; Separator between esh-sections
-  (setq esh-sep " ")  ; or " | "
-  ;;
-  ;; Separator between an esh-section icon and form
-  (setq esh-section-delim "")
-  ;;
-  ;; Eshell prompt header
-  (setq esh-header "\n ")  ; or "\n┌─"
-  ;;
-  ;; Eshell prompt regexp and string. Unless you are varying the prompt by eg.
-  ;; your login, these can be the same.
-  (setq eshell-prompt-regexp " \x2130 ")   ; or "└─> "
-  (setq eshell-prompt-string " \x2130 ")   ; or "└─> "
-  ;;
-  ;; Choose which eshell-funcs to enable
-  ;; (setq eshell-funcs (list esh-dir esh-git esh-python esh-clock esh-num))
-  ;; (setq eshell-funcs (list esh-dir esh-git esh-clock esh-num))
-  (setq eshell-funcs (list esh-dir esh-git))
-
-  ;; Enable the new eshell prompt
-  (setq eshell-prompt-function 'esh-prompt-func)
-
-  ;; End of Eshell
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Shell configuration
-  ;;
-  ;; Use zsh for default multi-term shell
-  ;; (setq multi-term-program "/usr/bin/zsh")
-  ;;
-  ;; End of Shell configuration
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; MacOSX
+  ;; MacOS
   ;; Disable touchpad zoom gestures
   ;;
   (define-key global-map (kbd "<magnify-up>") nil)
@@ -1399,6 +1282,9 @@ before packages are loaded."
   (define-key global-map (kbd "<magnify-up>") 'practicalli-nothing)
 
   (setq frame-resize-pixelwise t)
+
+  (setq trash-directory "~/.Trash")
+  (setq helm-trash-default-directory "~/.Trash")
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1449,7 +1335,6 @@ before packages are loaded."
   ;; Get GPG pinentry working
   (require 'epg)
   (setq epg-pinentry-mode 'loopback)
-  (pinentry-start)
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1467,13 +1352,33 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(safe-local-variable-values
-   '((cider-known-endpoints
+   '((major-mode . nxml-mode)
+     (eval
+      (lambda nil
+        (when
+            (not
+             (featurep 'clerk))
+          (let
+              ((init-file-path
+                (expand-file-name "clerk.el" default-directory)))
+            (when
+                (file-exists-p init-file-path)
+              (load init-file-path)
+              (require 'clerk))))))
+     (cider-jack-in-default . "bb nrepl-server")
+     (cljr-suppress-no-project-warning . t)
+     (cider-allow-jack-in-without-project quote t)
+     (cljr-suppress-no-project-warning quote t)
+     (cider-edit-jack-in-command: "bb --nrepl-server")
+     (major-mode . clojure-mode)
+     (cider-known-endpoints
       ("localhost" "8776"))
      (typescript-backend . tide)
      (typescript-backend . lsp)
      (javascript-backend . tide)
      (javascript-backend . tern)
-     (javascript-backend . lsp))))
+     (javascript-backend . lsp)))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
