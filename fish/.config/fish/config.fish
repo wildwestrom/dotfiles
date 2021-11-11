@@ -4,7 +4,7 @@
 set fish_greeting
 
 # First line removes the path; second line sets it.  Without the first line, # your path gets massive and fish becomes very slow.
-set -e fish_user_paths 
+set -e fish_user_paths
 
 # Default programs:
 set EDITOR "nvim"
@@ -33,7 +33,8 @@ set -x C_INCLUDE_PATH "$HOME/homebrew/include" $C_INCLUDE_PATH
 set -x PATH "/Users/main/homebrew/opt/coreutils/libexec/gnubin" $PATH
 
 # JVM
-set -x PATH $HOME/.jenv/bin $PATH
+set -x JAVA_HOME "Library/Java/JavaVirtualMachines/graalvm-ce-java17-21.3.0/Contents/Home"
+set -x PATH "$JAVA_HOME/bin" $PATH
 
 # Android tools
 set -x ANDROID_HOME "$HOME/Library/Android/sdk/"
@@ -94,7 +95,7 @@ set -x HISTFILE "$HOME/.local/share/history"
 set -x TESSDATA_PREFIX "$HOME/homebrew/share/tessdata/"
 
 # GPG
-set -x GPG_TTY (tty)
+# set -x GPG_TTY (tty)
 
 ### ALIASES
 
@@ -161,9 +162,7 @@ end
 # if test -d (brew --prefix)"/share/fish/completions"
 #     set -x fish_complete_path $fish_complete_path (brew --prefix)/share/fish/completions
 # end
-# 
+#
 # if test -d (brew --prefix)"/share/fish/vendor_completions.d"
 #     set -x fish_complete_path $fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
 # end
-
-status --is-interactive; and source (jenv init -|psub)
