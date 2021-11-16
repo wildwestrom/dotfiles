@@ -76,6 +76,9 @@ set -x PATH "$HOME/emacs/doom-emacs/bin" $PATH
 set -x NPM_CONFIG_PREFIX "$XDG_DATA_HOME/npm-global"
 set -x PATH "$NPM_CONFIG_PREFIX/bin" $PATH
 
+# Python
+alias python='$HOME/homebrew/bin/python3'
+
 # ~/ Clean-up:
 set -x NOTMUCH_CONFIG "$XDG_CONFIG_HOME/notmuch-config"
 set -x GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
