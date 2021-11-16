@@ -332,7 +332,12 @@ This function should only modify configuration layer settings."
 
           lsp-idle-delay 5.000
 
-          lsp-log-io nil)
+          lsp-log-io nil
+
+          ;; Rust
+          lsp-rust-server 'rust-analyzer
+          cargo-process-reload-on-modify t
+          )
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Visualizer
