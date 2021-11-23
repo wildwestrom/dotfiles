@@ -20,11 +20,11 @@ This function should only modify configuration layer settings."
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation nil
+   dotspacemacs-enable-lazy-installation 'unused
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
-   dotspacemacs-ask-for-lazy-installation t
+   dotspacemacs-ask-for-lazy-installation nil
 
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
@@ -52,10 +52,10 @@ This function should only modify configuration layer settings."
 
      ;; Nyan cat indicating relative position in current buffer
      ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
-     ;;colors
+     colors
 
      ;; Include emojis into everything
-     ;;emoji
+     emoji
 
      ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
      (spacemacs-modeline :variables
@@ -87,7 +87,7 @@ This function should only modify configuration layer settings."
      ;; Spell as you type with Flyspell package,
      ;; requires external command - ispell, hunspell, aspell
      ;; SPC S menu, SPC S s to check current word
-     spell-checking
+     (spell-checking :variables spell-checking-enable-by-default nil)
 
      ;; Editing multiple lines of text concurrently
      ;; `g r' menu in Emacs normal state
@@ -99,6 +99,9 @@ This function should only modify configuration layer settings."
 
      (helm :variables
            helm-follow-mode-persistent t)
+
+     (osx :variables
+          osx-command-as 'super)
 
      ;; Text-based file manager with preview - SPC a t r r
      (ranger :variables
@@ -114,12 +117,11 @@ This function should only modify configuration layer settings."
                treemacs-lock-width t
                treemacs-width 22
                treemacs-indentation 1
+               treemacs-use-all-the-icons-theme t
+               treemacs-space-between-root-nodes nil
                treemacs-use-filewatch-mode t
-               ;treemacs-use-follow-mode t
+               treemacs-use-follow-mode t
                )
-     ;; (neotree :variables
-     ;;          neo-theme 'icons
-     ;;          neo-vc-integration '(face))
 
      ;; spacemacs-layouts layer added to set variables
      ;; SPC TAB restricted to current layout buffers
@@ -193,12 +195,10 @@ This function should only modify configuration layer settings."
      (javascript :variables
                  javascript-backend 'lsp)
      typescript
-     ;; Frameworks
-     ;; vue
-     react
+     svelte
 
-     ;; elm
-     ;; purescript
+     elm
+     purescript
 
      prettier
 
@@ -210,11 +210,13 @@ This function should only modify configuration layer settings."
 
      csv
 
+     epub
+
      json
 
-     ;; (latex :variables
-     ;;        latex-backend 'lsp
-     ;;        latex-refresh-preview t)
+     (latex :variables
+            latex-backend 'lsp
+            latex-refresh-preview t)
 
      (markdown :variables
                markdown-live-preview-engine 'vmd)
@@ -277,13 +279,11 @@ This function should only modify configuration layer settings."
      ;; Completion and other smartness
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-     ;; To have auto-completion on as soon as you start typing
-     ;; (auto-completion :variables auto-completion-idle-delay nil)
-
      ;; Add tool tips to show doc string of functions
      ;; Show snippets in the auto-completion popup
      ;; Show suggestions by most commonly used
      (auto-completion :variables
+                      auto-completion-idle-delay nil ; auto-completion on as soon as you start typing
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t)
@@ -295,10 +295,10 @@ This function should only modify configuration layer settings."
      ;; https://practicalli.github.io/spacemacs/install-spacemacs/clojure-lsp/lsp-variables-reference.html
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
-          lsp-enable-on-type-formatting nil
+          lsp-enable-on-type-formatting t
           ;; Set to nil to use CIDER features instead of LSP UI
           ;; Default t
-          ;; lsp-enable-indentation nil
+          lsp-enable-indentation t
           lsp-enable-snippet t  ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
@@ -311,10 +311,10 @@ This function should only modify configuration layer settings."
           lsp-modeline-code-actions-enable nil
 
           ;; popup documentation boxes
-          ;; lsp-ui-doc-enable nil             ;; disable all doc popups
+          lsp-ui-doc-enable t               ;; disable all doc popups
           lsp-ui-doc-show-with-cursor t     ;; doc popup for cursor
           lsp-ui-doc-show-with-mouse nil    ;; doc popup for mouse
-          lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
+          lsp-ui-doc-delay 1                ;; delay in seconds for popup to display
 
           ;; code actions and diagnostics text as right-hand side of buffer
           lsp-ui-sideline-enable nil
@@ -325,7 +325,6 @@ This function should only modify configuration layer settings."
           lsp-lens-enable nil
 
           ;; Efficient use of space in treemacs-lsp display
-          treemacs-space-between-root-nodes nil
 
           ;; Optimization for large files
           lsp-file-watch-threshold 10000
@@ -645,7 +644,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar nil
+   dotspacemacs-loading-progress-bar t
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
@@ -713,16 +712,17 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   dotspacemacs-line-numbers '(:visual t
-                               :disabled-for-modes dired-mode
-                                                   doc-view-mode
-                                                   pdf-view-mode
-                               :size-limit-kb 1000)
+   ;; For some reason this causes a massive performance hit
+   ;; dotspacemacs-line-numbers '(:relative nil
+   ;;                             :disabled-for-modes dired-mode
+   ;;                                                 doc-view-mode
+   ;;                                                 pdf-view-mode
+   ;;                             :size-limit-kb 1000)
 
 
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
-   dotspacemacs-folding-method 'vimish
+   dotspacemacs-folding-method 'evil
 
    ;; If non-nil and `dotspacemacs-activate-smartparens-mode' is also non-nil,
    ;; `smartparens-strict-mode' will be enabled in programming modes.
@@ -885,6 +885,12 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Some breathing room while scrolling vertically
+  (setq scroll-margin 10)
+  ;; test this
+  (setq-default display-line-numbers-width 3)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; org-roam-graph config
   (setq org-roam-graph-extra-config
         '(("rankdir" . "TB")
@@ -904,6 +910,13 @@ before packages are loaded."
   (put 'evil-ex-history 'history-length 50)
   (put 'kill-ring 'history-length 25)
   (savehist-mode -1)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Keeping Helm history clean
+  (setq history-delete-duplicates t)
+  (setq extended-command-history
+        (delq nil (delete-dups extended-command-history)))
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1051,19 +1064,19 @@ before packages are loaded."
   ;; Set the files that are searched for writing tokens
   ;; by default ~/.authinfo will be used
   ;; and write a token in unencrypted format
-  ;; (setq auth-sources '("~/.authinfo.gpg"))
+  (setq auth-sources '("~/.authinfo.gpg"))
   ;;
   ;; Configure number of topics show, open and closed
   ;; use negative number to toggle the view of closed topics
   ;; using `SPC SPC forge-toggle-closed-visibility'
-  ;; (setq  forge-topic-list-limit '(100 . -10))
+  (setq  forge-topic-list-limit '(100 . -10))
   ;; set closed to 0 to never show closed issues
-  ;; (setq  forge-topic-list-limit '(100 . 0))
+  (setq  forge-topic-list-limit '(100 . 0))
   ;;
   ;; GitHub user and organization accounts owned
   ;; used by @ c f  to create a fork
-  ;; (setq forge-owned-accounts
-  ;;       '(("wildwestrom")))
+  (setq forge-owned-accounts
+        '(("wildwestrom")))
   ;; To blacklist specific accounts,
   ;; over-riding forge-owned-accounts
   ;; (setq forge-owned-blacklist
@@ -1191,13 +1204,25 @@ before packages are loaded."
   ;; Markdown mode hook for orgtbl-mode minor mode
   ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
   ;;
-  ;; Turn on visual-line-mode for Org-mode only
-  ;; (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
-  ;;
   ;; use org-re-reveal instead of org-reveal (which hasnt been updated in ages and breaks org-mode 9.2)
   ;; (use-package org-re-reveal :after org)
   ;;
   ;; End of Org-mode Configuration
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Web-mode configuration
+  ;;
+  ;; Changing auto indent size for languages in html layer (web mode) to 2 (defaults to 4)
+  (defun web-mode-indent-2-hook ()
+    "Indent settings for languages in Web mode, markup=html, css=css, code=javascript/php/etc."
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset  2)
+    (setq web-mode-code-indent-offset 2))
+  ;;
+  (add-hook 'web-mode-hook  'web-mode-indent-2-hook)
+  ;;
+  ;; End of Web-mode configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -1259,22 +1284,7 @@ before packages are loaded."
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Web-mode configuration
-  ;;
-  ;; Changing auto indent size for languages in html layer (web mode) to 2 (defaults to 4)
-  (defun web-mode-indent-2-hook ()
-    "Indent settings for languages in Web mode, markup=html, css=css, code=javascript/php/etc."
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset  2)
-    (setq web-mode-code-indent-offset 2))
-
-  (add-hook 'web-mode-hook  'web-mode-indent-2-hook)
-  ;;
-  ;; End of Web-mode configuration
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; MacOS
+  ;; MacOS/OSX
   ;; Disable touchpad zoom gestures
   ;;
   (define-key global-map (kbd "<magnify-up>") nil)
@@ -1378,10 +1388,7 @@ This function is called at the very end of Spacemacs initialization."
      (major-mode . clojure-mode)
      (cider-known-endpoints
       ("localhost" "8776"))
-     (typescript-backend . tide)
      (typescript-backend . lsp)
-     (javascript-backend . tide)
-     (javascript-backend . tern)
      (javascript-backend . lsp)))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
