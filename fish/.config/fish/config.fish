@@ -97,9 +97,6 @@ set -x UNISON "$HOME/.local/share/unison"
 set -x HISTFILE "$HOME/.local/share/history"
 set -x TESSDATA_PREFIX "$HOME/homebrew/share/tessdata/"
 
-# GPG
-# set -x GPG_TTY (tty)
-
 ### ALIASES
 
 # Verbosity and settings that you pretty much just always are going to want.
