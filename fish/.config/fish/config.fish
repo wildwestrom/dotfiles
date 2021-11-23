@@ -79,6 +79,12 @@ set -x PATH "$NPM_CONFIG_PREFIX/bin" $PATH
 # Python
 alias python='$HOME/homebrew/bin/python3'
 
+# ssh with gpg key
+set -e SSH_AGENT_PID
+if not set -q gnupg_SSH_AUTH_SOCK_by or test $gnupg_SSH_AUTH_SOCK_by -ne $fish_pid
+    set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+end
+
 # ~/ Clean-up:
 set -x NOTMUCH_CONFIG "$XDG_CONFIG_HOME/notmuch-config"
 set -x GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
