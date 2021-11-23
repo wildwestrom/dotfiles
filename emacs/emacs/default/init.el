@@ -1,53 +1,114 @@
-;; ~/.emacs or ~/.emacs.d/init.el
+;; BEGIN CONFIG
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Install straight.el
+;; Turn off startup message
+(setq inhibit-startup-message t)
+(scroll-bar-mode -1)  ; Disable visible scrollbar
+(tool-bar-mode -1)    ; Disable the toolbar
+;(tooltip-mode -1)     ; Disable tooltips
+;(set-fringe-mode 10)  ; Add more padding on the sides, default is 8px
+(setq visible-bell t) ; No beepling, but now there's a big pop-up on my screen
 
-(defvar bootstrap-version)
 
-(let ((install-url "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el")
-      (bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer (url-retrieve-synchronously install-url 'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Install and enable use-package
+(setq scroll-step 1                ;; Lets me scroll one line at a time
+      scroll-margin 1              ;; Gives me a one-line margin when scrolling
+      scroll-conservatively 100000 ;; Doesn't jump when scrolling
+      )
 
-(straight-use-package 'use-package)
+;; MacOS
+(setq frame-resize-pixelwise t)
+;; Set retina/hidpi display settings properly
 
-(setq straight-use-package-by-default t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Install Corgi
+;; set up font
+;; (set-face-attribute 'default nil
+;; 		    :font "JetBrainsMono Nerd Font Mono"
+;; 		    :height 140
+;; 		    )
 
-(use-package corgi-packages
-  :straight (corgi-packages
-             :type git
-             :host github
-            :repo "lambdaisland/corgi-packages"))
+;; set-up use-package
+(require 'package)
 
-(add-to-list #'straight-recipe-repositories 'corgi-packages)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ;("melpa-stable" . "https://stable.melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
 
-(let ((straight-current-profile 'corgi))
-  (use-package corgi-defaults)
-  (use-package corgi-editor)
-  (use-package corgi-emacs-lisp)
-  (use-package corgi-commands)
-  (use-package corgi-clojure)
-  (use-package corgi-stateline)
-  (use-package corkey
-    :config
-    (corkey-mode 1)
-    (corkey/install-bindings)))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Your own stuff goes here, we recommend these extra packages
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 
-(use-package markdown-mode)
-(use-package yaml-mode)
-(use-package org)
-(use-package magit)
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+;; Add support for keyboard command logging
+;; Use clm/toggle-command-log-buffer
+(use-package command-log-mode
+  :after (global-command-log-mode))
+
+;; TODO: Figure out how to save buffers between restarts
+;; desktop-save? persp-mode?
+
+;; Look into just-one-space M-SPC
+;; TODO: Create el function that executes just-one-space when there is only whitespace to the left of the cursor
+
+
+;; TODO: Close parentheses, other brackets, quotes, etc. automatically.
+
+;; evil-mode
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
+;; TODO: Org Roam
+
+;; TODO: Custom theming, most likely atom light
+
+;; TODO: Let me type in y instead of yes for prompts
+
+;; TODO: which-key
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config (setq which-key-idle-delay 1))
+
+;; TODO: auto completion
+;; TODO: helm swoop
+
+
+;; TODO: no tabs, only spaces
+
+;; TODO: figure out window manip bindings
+
+
+;; TODO: bindings:
+;; Switch-windows
+;; Leader to SPC
+;; SPC SPC opens M-x minibuffer
+;; scroll+ctrl to change font size globally
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(which-key-posframe which-key command-log-mode use-package general evil-collection counsel avy)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
