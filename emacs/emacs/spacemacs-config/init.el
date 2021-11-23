@@ -356,7 +356,7 @@ This function should only modify configuration layer settings."
      ;; shell-default-shell 'vterm
      (shell :variables
             shell-default-shell 'vterm
-            shell-default-term-shell "~/homebrew/bin/fish"
+            shell-default-term-shell "/bin/zsh"
             shell-default-width 30
             shell-default-position 'bottom
             terminal-here-mac-terminal-command 'iterm2)
