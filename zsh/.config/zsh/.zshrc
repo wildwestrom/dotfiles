@@ -6,18 +6,6 @@ export VISUAL="nvim"
 
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
-### SET VI MODE ###
-# Comment this line out to enable default emacs-like bindings
-bindkey -v
-export KEYTIMEOUT=1
-
-# History in cache directory:
-HISTSIZE=10000000
-SAVEHIST=10000000
-
 ### PATH
 export PATH="$HOME/homebrew/bin:$PATH"
 export PATH="$HOME/homebrew/sbin:$PATH"
@@ -30,10 +18,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-# ssh login with yubikey works
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent
-
 if [ -d "$HOME/.local/bin" ] ;
   then PATH="$HOME/.local/bin:$PATH"
 fi
@@ -42,6 +26,14 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
 export HOMEBREW_CASK_OPTS="--build-from-source"
+
+# Trying out GPG pinentry
+unset SSH_AUTH_SOCK
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket) 
+
+export GPG_TTY="$(tty)"
+
+gpgconf --launch gpg-agent
 
 # Doom Emacs
 export PATH="$HOME/emacs/doom-emacs/bin:$PATH"
@@ -83,6 +75,9 @@ export ELECTRUMDIR="${XDG_DATA_HOME:-$HOME/.local/share}/electrum"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$XDG_CONFIG_HOME/zsh/.oh-my-zsh"
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -138,7 +133,12 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions history-substring-search zsh-syntax-highlighting)
+plugins=(git
+         zsh-autosuggestions
+         history-substring-search
+         zsh-syntax-highlighting
+         vi-mode
+         zsh-vimode-visual)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -158,9 +158,11 @@ alias \
 alias \
     cp="cp -iv" \
     mv="mv -iv" \
+    ln="ln -iv" \
     rm="rm -iv"
 
 alias cat="bat"
 
 alias vimrc="cd $XDG_CONFIG_HOME/nvim/"
 alias zshrc="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc"
+alias spacerc="$EDITOR $HOME/emacs/spacemacs-config/init.el"
