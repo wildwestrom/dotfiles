@@ -23,3 +23,5 @@
 	ui = auto
 [commit]
 	gpgsign = true
+[gpg]
+	program = /Users/main/homebrew/bin/gpg
